@@ -1,7 +1,42 @@
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { Carousel, CarouselItem } from "@/components/Carousel";
+import { FeedItem } from "@/components/FeedItem";
 import flowLinesHero from "@/assets/flow-lines-hero.svg";
 import flowLinesCircle from "@/assets/flow-lines-circle.svg";
+import flowLinesVertical from "@/assets/flow-lines-vertical.svg";
+
+// Sample featured content
+const featuredProjects = [
+  {
+    id: "1",
+    title: "Personal Knowledge Base",
+    description: "A React-based knowledge management system for organizing projects, ideas, and journal entries with a clean, reader-first design.",
+    date: "2024-03-15",
+    tags: ["React", "TypeScript", "Tailwind CSS"],
+    coverImage: flowLinesVertical,
+    readingTime: 5,
+    type: "project" as const,
+  },
+  {
+    id: "2",
+    title: "Data Visualization Dashboard",
+    description: "Interactive dashboard for visualizing complex datasets with real-time updates and customizable charts.",
+    date: "2024-02-20",
+    tags: ["D3.js", "React", "API Integration"],
+    readingTime: 8,
+    type: "project" as const,
+  },
+  {
+    id: "1",
+    title: "Reflections on Building in Public",
+    description: "Thoughts on sharing my learning journey openly and the unexpected benefits of transparency in the development process.",
+    date: "2024-03-20",
+    tags: ["Learning", "Community", "Growth"],
+    readingTime: 4,
+    type: "journal" as const,
+  },
+];
 
 const Index = () => {
   const sections = [
@@ -57,6 +92,26 @@ const Index = () => {
             </p>
           </div>
         </div>
+      </section>
+
+      {/* Featured Content Carousel */}
+      <section className="container mx-auto px-8 py-16 max-w-6xl border-b border-border">
+        <h2 className="text-3xl font-serif font-bold mb-8">Featured</h2>
+        <Carousel>
+          {featuredProjects.map((item) => (
+            <CarouselItem key={`${item.type}-${item.id}`}>
+              <FeedItem
+                title={item.title}
+                description={item.description}
+                date={item.date}
+                path={`/${item.type === 'project' ? 'projects' : 'journal'}/${item.id}`}
+                tags={item.tags}
+                coverImage={item.coverImage}
+                readingTime={item.readingTime}
+              />
+            </CarouselItem>
+          ))}
+        </Carousel>
       </section>
 
       {/* Sections Grid */}

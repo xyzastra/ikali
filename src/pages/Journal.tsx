@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { SectionHeader } from "@/components/SectionHeader";
 import { FeedItem } from "@/components/FeedItem";
+import { ColumnLayout } from "@/components/ColumnLayout";
 
 // Sample journal entries data
 const journalEntries = [
@@ -41,7 +42,7 @@ const Journal = () => {
           description="Personal reflections, learnings, and experiences captured over time. A space for introspection and growth."
         />
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <ColumnLayout columns={2}>
           {journalEntries.map((entry) => (
             <FeedItem
               key={entry.id}
@@ -53,7 +54,7 @@ const Journal = () => {
               readingTime={entry.readingTime}
             />
           ))}
-        </div>
+        </ColumnLayout>
 
         {journalEntries.length === 0 && (
           <div className="text-center py-16">
