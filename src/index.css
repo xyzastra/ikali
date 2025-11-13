@@ -93,8 +93,9 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
     font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    line-height: 1.8;
+    line-height: var(--line-height, 1.8);
     letter-spacing: -0.01em;
+    transition: var(--transition-smooth);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -116,5 +117,80 @@ All colors MUST be HSL.
 
   code, pre {
     font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* Focus Mode Styles */
+  body.focus-mode header,
+  body.focus-mode footer {
+    display: none;
+  }
+
+  body.focus-mode main {
+    max-width: 65ch;
+    margin: 2rem auto;
+    padding: 2rem;
+  }
+
+  /* Contrast Levels */
+  body[data-contrast="high"] {
+    --foreground: 0 0% 0%;
+    --background: 0 0% 100%;
+    --muted-foreground: 0 0% 20%;
+  }
+
+  body.dark[data-contrast="high"] {
+    --foreground: 0 0% 100%;
+    --background: 0 0% 0%;
+    --muted-foreground: 0 0% 80%;
+  }
+
+  body[data-contrast="higher"] {
+    --foreground: 0 0% 0%;
+    --background: 0 0% 100%;
+    --muted-foreground: 0 0% 0%;
+    --border: 0 0% 0%;
+  }
+
+  body.dark[data-contrast="higher"] {
+    --foreground: 0 0% 100%;
+    --background: 0 0% 0%;
+    --muted-foreground: 0 0% 100%;
+    --border: 0 0% 100%;
+  }
+
+  /* Reduce Motion */
+  body.reduce-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Screen Reader Only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Skip to Content Link */
+  .skip-to-content {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    padding: 1rem 2rem;
+    z-index: 100;
+    transition: top 0.3s;
+  }
+
+  .skip-to-content:focus {
+    top: 0;
   }
 }
