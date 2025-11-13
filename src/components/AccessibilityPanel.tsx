@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
-import { useTheme } from 'next-themes';
+
 import {
   Eye,
   Sun,
@@ -20,8 +20,21 @@ import { Label } from '@/components/ui/label';
 export const AccessibilityPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { settings, updateSetting, resetSettings } = useAccessibility();
-  const { theme, setTheme } = useTheme();
+  const [theme, setThemeState] = useState<'light' | 'dark'>('light');
 
+  const applyTheme = (next: 'light' | 'dark') => {
+    setThemeState(next);
+    localStorage.setItem('theme', next);
+    const root = document.documentElement;
+    if (next === 'dark') root.classList.add('dark');
+    else root.classList.remove('dark');
+  };
+
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    const initial = saved === 'dark' || document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    applyTheme(initial);
+  }, []);
   return (
     <>
       {/* Trigger Button */}
@@ -64,7 +77,7 @@ export const AccessibilityPanel = () => {
               <Button
                 variant={theme === 'light' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setTheme('light')}
+                onClick={() => applyTheme('light')}
                 className="flex-1"
               >
                 <Sun className="h-4 w-4 mr-2" />
@@ -73,7 +86,7 @@ export const AccessibilityPanel = () => {
               <Button
                 variant={theme === 'dark' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setTheme('dark')}
+                onClick={() => applyTheme('dark')}
                 className="flex-1"
               >
                 <Moon className="h-4 w-4 mr-2" />
