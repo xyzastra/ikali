@@ -40,15 +40,6 @@ export default {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
-        // Bento Grid Colors
-        "bento-coral": "hsl(var(--bento-coral))",
-        "bento-amber": "hsl(var(--bento-amber))",
-        "bento-emerald": "hsl(var(--bento-emerald))",
-        "bento-sky": "hsl(var(--bento-sky))",
-        "bento-violet": "hsl(var(--bento-violet))",
-        "bento-rose": "hsl(var(--bento-rose))",
-        "bento-teal": "hsl(var(--bento-teal))",
-        "bento-indigo": "hsl(var(--bento-indigo))",
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",

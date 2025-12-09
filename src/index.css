@@ -48,16 +48,6 @@ All colors MUST be HSL.
     --nav-hover: 0 0% 95%;
     --nav-active: 0 0% 0%;
     
-    /* Bento Grid Colors - Vibrant palette */
-    --bento-coral: 12 76% 61%;
-    --bento-amber: 38 92% 50%;
-    --bento-emerald: 160 84% 39%;
-    --bento-sky: 199 89% 48%;
-    --bento-violet: 263 70% 50%;
-    --bento-rose: 350 89% 60%;
-    --bento-teal: 173 80% 40%;
-    --bento-indigo: 239 84% 67%;
-    
     /* Hugo-brewm specific variables */
     --bg: 0 0% 100%;
     --fg: 0 0% 0%;
@@ -119,16 +109,6 @@ All colors MUST be HSL.
     
     --nav-hover: 0 0% 10%;
     --nav-active: 0 0% 100%;
-    
-    /* Bento Grid Colors - Darker variants for dark mode */
-    --bento-coral: 12 76% 50%;
-    --bento-amber: 38 92% 45%;
-    --bento-emerald: 160 84% 35%;
-    --bento-sky: 199 89% 42%;
-    --bento-violet: 263 70% 45%;
-    --bento-rose: 350 89% 50%;
-    --bento-teal: 173 80% 35%;
-    --bento-indigo: 239 84% 55%;
     
     /* Hugo-brewm specific dark mode variables */
     --bg: 0 0% 0%;
