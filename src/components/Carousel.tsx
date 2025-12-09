@@ -87,7 +87,7 @@ interface CarouselItemProps {
 
 export const CarouselItem = ({ children, className = "" }: CarouselItemProps) => {
   return (
-    <div className={`flex-shrink-0 w-full md:w-[320px] snap-start px-2 ${className}`}>
+    <div className={`flex-shrink-0 w-[85vw] sm:w-[340px] md:w-[360px] snap-start px-2 first:pl-0 last:pr-0 ${className}`}>
       {children}
     </div>
   );
