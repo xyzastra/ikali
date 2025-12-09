@@ -3,17 +3,12 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { Briefcase, GraduationCap, Award, Mail, MapPin, Linkedin } from "lucide-react";
 import { CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
 const Resume = () => {
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <Header />
       
       <main className="container mx-auto px-8 py-24 max-w-4xl">
-        <SectionHeader
-          title="Inga K."
-          description="AI Governance Engineer | Federal Policy-to-Code Specialist"
-        />
+        <SectionHeader title="Inga K." description="AI Governance Engineer | Federal Policy-to-Code Specialist" />
 
         {/* Contact Info */}
         <div className="mb-12 pb-8 border-b border-border">
@@ -30,12 +25,7 @@ const Resume = () => {
             </div>
             <div className="flex items-center gap-2">
               <Linkedin className="h-4 w-4" />
-              <a 
-                href="https://www.linkedin.com/in/ik11/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="hover:opacity-70 transition-opacity"
-              >
+              <a href="https://www.linkedin.com/in/ik11/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity">
                 linkedin.com/in/ik11
               </a>
             </div>
@@ -45,9 +35,7 @@ const Resume = () => {
         {/* Summary */}
         <div className="mb-16">
           <h2 className="text-3xl font-serif font-bold mb-4">Professional Summary</h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            AI Governance Engineer with 4+ years of experience translating federal regulatory requirements 
-            (NIST AI RMF, FERPA, DoD Instructions) into deployed technical systems. <strong className="text-foreground">Pioneered the 
+          <p className="text-lg text-muted-foreground leading-relaxed">AI Governance Engineer with 4+ years of experience translating federal regulatory requirements (NIST AI RMF, FERPA, DoD Instructions) into deployed technical systems.<strong className="text-foreground">Pioneered the 
             "Better Consulting Liaison Service" model</strong>, a rapid deployment framework that bridges the gap 
             between institutional policy and privacy-first AI pilots. Expert in converting complex governance 
             frameworks into functional Proof-of-Concept (POC) pilots and compliance automation tools for the 
@@ -62,49 +50,39 @@ const Resume = () => {
             Technical & Governance Skills
           </h2>
           <CardContent>
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div>
                 <h3 className="font-serif font-semibold text-lg mb-3">AI Architectures</h3>
                 <div className="flex flex-wrap gap-2">
-                  {["SME OS (Subject Matter Expert Operating System)", "Open-Source LLMs (Llama, Mistral)", "Swarm Intelligence Protocols", "Biomimetic Networks"].map((skill) => (
-                    <Badge key={skill} variant="outline" className="font-mono text-xs">{skill}</Badge>
-                  ))}
+                  {["SME OS (Subject Matter Expert Operating System)", "Open-Source LLMs (Llama, Mistral)", "Swarm Intelligence Protocols", "Biomimetic Networks"].map(skill => <Badge key={skill} variant="outline" className="font-mono text-xs">{skill}</Badge>)}
                 </div>
               </div>
               
               <div>
                 <h3 className="font-serif font-semibold text-lg mb-3">Demo & Pilot Modules</h3>
                 <div className="flex flex-wrap gap-2">
-                  {["@QuantumExplorer (Energy Dist.)", "@SolarSage (Swarm Opt.)", "@BioGridder (Adaptive Networks)", "@CyberGridGuru (Autonomous Communities)"].map((skill) => (
-                    <Badge key={skill} variant="outline" className="font-mono text-xs">{skill}</Badge>
-                  ))}
+                  {["@QuantumExplorer (Energy Dist.)", "@SolarSage (Swarm Opt.)", "@BioGridder (Adaptive Networks)", "@CyberGridGuru (Autonomous Communities)"].map(skill => <Badge key={skill} variant="outline" className="font-mono text-xs">{skill}</Badge>)}
                 </div>
               </div>
 
               <div>
                 <h3 className="font-serif font-semibold text-lg mb-3">Governance Frameworks</h3>
                 <div className="flex flex-wrap gap-2">
-                  {["NIST AI Risk Management Framework (RMF)", "Title IX/FERPA Compliance", "DoD Compliance Protocols", "Algorithmic Transparency"].map((skill) => (
-                    <Badge key={skill} variant="outline" className="font-mono text-xs">{skill}</Badge>
-                  ))}
+                  {["NIST AI Risk Management Framework (RMF)", "Title IX/FERPA Compliance", "DoD Compliance Protocols", "Algorithmic Transparency"].map(skill => <Badge key={skill} variant="outline" className="font-mono text-xs">{skill}</Badge>)}
                 </div>
               </div>
               
               <div>
                 <h3 className="font-serif font-semibold text-lg mb-3">Security & Cyber</h3>
                 <div className="flex flex-wrap gap-2">
-                  {["OSINT", "Metasploit", "Burp Suite", "Threat Modeling", "Blockchain Identity Verification"].map((skill) => (
-                    <Badge key={skill} variant="outline" className="font-mono text-xs">{skill}</Badge>
-                  ))}
+                  {["OSINT", "Metasploit", "Burp Suite", "Threat Modeling", "Blockchain Identity Verification"].map(skill => <Badge key={skill} variant="outline" className="font-mono text-xs">{skill}</Badge>)}
                 </div>
               </div>
 
               <div>
                 <h3 className="font-serif font-semibold text-lg mb-3">Development</h3>
                 <div className="flex flex-wrap gap-2">
-                  {["Python", "Rapid Prototyping (4-Week Pilot Sprints)", "Energy Intelligence Dashboarding"].map((skill) => (
-                    <Badge key={skill} variant="outline" className="font-mono text-xs">{skill}</Badge>
-                  ))}
+                  {["Python", "Rapid Prototyping (4-Week Pilot Sprints)", "Energy Intelligence Dashboarding"].map(skill => <Badge key={skill} variant="outline" className="font-mono text-xs">{skill}</Badge>)}
                 </div>
               </div>
             </div>
@@ -272,16 +250,12 @@ const Resume = () => {
             <div>
               <h3 className="font-serif font-semibold text-lg mb-3">Certifications</h3>
               <div className="flex flex-wrap gap-2">
-                {["Advanced Cyber Threat Intelligence (Cybrary)", "Open-Source Intelligence (OSINT) (Udemy)", "MicroStrategy Analyst Certification"].map((cert) => (
-                  <Badge key={cert} variant="outline" className="font-mono text-xs">{cert}</Badge>
-                ))}
+                {["Advanced Cyber Threat Intelligence (Cybrary)", "Open-Source Intelligence (OSINT) (Udemy)", "MicroStrategy Analyst Certification"].map(cert => <Badge key={cert} variant="outline" className="font-mono text-xs">{cert}</Badge>)}
               </div>
             </div>
           </div>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default Resume;
