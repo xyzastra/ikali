@@ -101,7 +101,7 @@ const Index = () => {
               <Link
                 key={section.path}
                 to={section.path}
-                className="group border border-border rounded-lg p-4 hover:bg-muted/50 hover:border-primary/30 transition-all duration-200 active:scale-[0.97]"
+                className="group border border-border rounded-lg p-4 bg-card shadow-sm hover:shadow-md hover:bg-muted/50 hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 active:scale-[0.97]"
               >
                 <h3 className="text-sm sm:text-base font-semibold mb-1 group-hover:text-primary transition-colors">
                   {section.title}
