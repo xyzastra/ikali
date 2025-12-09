@@ -1,22 +1,24 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu } from "lucide-react";
+import { Menu, Home, Brain, Lightbulb, BookOpen, Briefcase, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
+import { LucideIcon } from "lucide-react";
 
-const navigation = [
-  { name: "Home", path: "/" },
-  { name: "Projects", path: "/projects" },
-  { name: "Idea Dumps", path: "/idea-dumps" },
-  { name: "Journal", path: "/journal" },
-  { name: "Resume", path: "/resume" },
+const navigation: { name: string; path: string; icon: LucideIcon }[] = [
+  { name: "Home", path: "/", icon: Home },
+  { name: "Projects", path: "/projects", icon: Brain },
+  { name: "Idea Dumps", path: "/idea-dumps", icon: Lightbulb },
+  { name: "Journal", path: "/journal", icon: BookOpen },
+  { name: "Resume", path: "/resume", icon: Briefcase },
+  { name: "Contact", path: "/contact", icon: Mail },
 ];
 
 export const Header = () => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
 
-  const NavLink = ({ name, path, mobile = false }: { name: string; path: string; mobile?: boolean }) => {
+  const NavLink = ({ name, path, icon: Icon, mobile = false }: { name: string; path: string; icon: LucideIcon; mobile?: boolean }) => {
     const isActive = location.pathname === path;
     
     return (
@@ -24,13 +26,14 @@ export const Header = () => {
         to={path}
         onClick={() => mobile && setOpen(false)}
         className={`
-          px-3 py-2 text-sm font-medium transition-opacity uppercase tracking-wide
+          px-3 py-2 text-sm font-medium transition-opacity uppercase tracking-wide flex items-center gap-2
           ${isActive 
             ? "text-foreground border-b-2 border-foreground" 
             : "text-muted-foreground hover:text-foreground hover:opacity-70"
           }
         `}
       >
+        <Icon className="h-4 w-4" />
         {name}
       </Link>
     );
