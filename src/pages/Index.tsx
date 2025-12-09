@@ -90,22 +90,23 @@ const Index = () => {
         </section>
 
         {/* Sections Grid */}
-        <section className="container mx-auto px-8 py-24 max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-12">
+        <section className="container mx-auto px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-24 max-w-6xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-12">
             {sections.map((section) => (
               <Link
                 key={section.path}
                 to={section.path}
-                className="group border border-border p-12 hover:bg-muted transition-colors"
+                className="group relative border border-border rounded-lg p-6 sm:p-8 md:p-10 lg:p-12 hover:bg-muted/50 hover:border-primary/20 transition-all duration-300 active:scale-[0.98]"
               >
-                <h2 className="text-3xl font-serif font-bold mb-4 group-hover:opacity-60 transition-opacity">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold mb-2 sm:mb-3 md:mb-4 group-hover:text-primary transition-colors">
                   {section.title}
                 </h2>
-                <p className="text-muted-foreground text-lg leading-relaxed">
+                <p className="text-muted-foreground text-sm sm:text-base md:text-lg leading-relaxed line-clamp-3">
                   {section.description}
                 </p>
-                <div className="mt-6 text-sm uppercase tracking-widest font-medium">
-                  Explore →
+                <div className="mt-4 sm:mt-5 md:mt-6 text-xs sm:text-sm uppercase tracking-widest font-medium text-primary opacity-70 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+                  Explore 
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </div>
               </Link>
             ))}
