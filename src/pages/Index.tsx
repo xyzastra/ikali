@@ -59,6 +59,11 @@ const Index = () => {
       description: "Professional experience in energy, manufacturing, and education consulting.",
       path: "/resume",
     },
+    {
+      title: "Contact",
+      description: "Get in touch for collaboration, questions, or opportunities.",
+      path: "/contact",
+    },
   ];
 
   return (
