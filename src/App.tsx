@@ -3,17 +3,28 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import Projects from "./pages/Projects";
-import ProjectDetail from "./pages/ProjectDetail";
-import IdeaDumps from "./pages/IdeaDumps";
-import IdeaDumpDetail from "./pages/IdeaDumpDetail";
-import Journal from "./pages/Journal";
-import JournalDetail from "./pages/JournalDetail";
-import Resume from "./pages/Resume";
-import NotFound from "./pages/NotFound";
+import { Suspense, lazy } from "react";
+import { Layout } from "@/components/Layout";
+
+// Lazy load pages for code splitting
+const Index = lazy(() => import("./pages/Index"));
+const Projects = lazy(() => import("./pages/Projects"));
+const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
+const IdeaDumps = lazy(() => import("./pages/IdeaDumps"));
+const IdeaDumpDetail = lazy(() => import("./pages/IdeaDumpDetail"));
+const Journal = lazy(() => import("./pages/Journal"));
+const JournalDetail = lazy(() => import("./pages/JournalDetail"));
+const Resume = lazy(() => import("./pages/Resume"));
+const Contact = lazy(() => import("./pages/Contact"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
+
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="animate-pulse text-muted-foreground">Loading...</div>
+  </div>
+);
 
 const App = () => {
   return (
@@ -22,22 +33,90 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <a href="#main-content" className="skip-to-content">
-            Skip to main content
-          </a>
-          <main id="main-content">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/projects/:id" element={<ProjectDetail />} />
-              <Route path="/idea-dumps" element={<IdeaDumps />} />
-              <Route path="/idea-dumps/:id" element={<IdeaDumpDetail />} />
-              <Route path="/journal" element={<Journal />} />
-              <Route path="/journal/:id" element={<JournalDetail />} />
-              <Route path="/resume" element={<Resume />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route
+                index
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <Index />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/projects"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <Projects />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/projects/:id"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <ProjectDetail />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/idea-dumps"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <IdeaDumps />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/idea-dumps/:id"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <IdeaDumpDetail />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/journal"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <Journal />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/journal/:id"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <JournalDetail />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/resume"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <Resume />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/contact"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <Contact />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="*"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <NotFound />
+                  </Suspense>
+                }
+              />
+            </Route>
+          </Routes>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
