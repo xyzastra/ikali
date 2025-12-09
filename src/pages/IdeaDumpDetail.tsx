@@ -3,115 +3,33 @@ import { Header } from "@/components/Header";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const ideaDumps = {
-  "1": {
-    id: "1",
-    title: "AI-Powered Learning Assistant",
-    description: "Concept for an adaptive learning platform that personalizes content based on individual learning patterns and pace.",
-    date: "2024-03-18",
-    tags: ["AI", "Education", "Concept"],
-    content: `
-## Core Concept
-
-An intelligent learning assistant that adapts to each student's unique learning style, pace, and preferences.
-
-## Key Ideas
-
-- Analyze learning patterns through interaction data
-- Personalize content delivery based on comprehension speed
-- Identify knowledge gaps automatically
-- Suggest optimal study schedules
-
-## Technical Approach
-
-Could leverage machine learning models to:
-- Predict difficulty levels for content
-- Recommend similar topics
-- Track progress over time
-- Provide real-time feedback
-
-## Open Questions
-
-- How to balance automation with human teaching?
-- Privacy concerns with learning data
-- Scalability for different subjects
-    `,
-  },
-  "2": {
-    id: "2",
-    title: "Decentralized Knowledge Sharing",
-    description: "Exploring blockchain-based systems for preserving and sharing knowledge across communities without centralized control.",
-    date: "2024-03-10",
-    tags: ["Blockchain", "Web3", "Community"],
-    content: `
-## Vision
-
-A decentralized platform where knowledge is owned by creators and preserved forever, without relying on centralized servers.
-
-## Why Blockchain?
-
-- Immutable record of contributions
-- Transparent attribution
-- Censorship resistance
-- Token incentives for quality content
-
-## Challenges to Solve
-
-- Storage costs on-chain
-- Content moderation in decentralized system
-- User experience complexity
-- Adoption barriers
-
-## Potential Solutions
-
-- IPFS for content storage
-- On-chain metadata only
-- Community-driven curation
-- Progressive decentralization
-    `,
-  },
-  "3": {
-    id: "3",
-    title: "Productivity Through Gamification",
-    description: "Ideas for incorporating game mechanics into daily productivity tools to increase motivation and engagement.",
-    date: "2024-02-28",
-    tags: ["Gamification", "Productivity", "UX"],
-    content: `
-## The Problem
-
-Traditional productivity apps are boring and fail to motivate long-term use.
-
-## Game Elements to Explore
-
-- Achievement systems for completing tasks
-- XP and leveling for sustained habits
-- Quests for complex projects
-- Leaderboards for team challenges
-- Daily streaks and rewards
-
-## Psychological Principles
-
-- Instant feedback loops
-- Variable reward schedules
-- Progress visualization
-- Social comparison and cooperation
-
-## Implementation Ideas
-
-- Task difficulty ratings affect XP earned
-- Boss battles for major milestones
-- Skill trees for different productivity areas
-- Customizable avatars and themes
-    `,
-  },
-};
+import { useIdeaDump } from "@/hooks/useIdeaDumps";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const IdeaDumpDetail = () => {
   const { id } = useParams();
-  const idea = id ? ideaDumps[id as keyof typeof ideaDumps] : null;
+  const { data: idea, isLoading, error } = useIdeaDump(id);
 
-  if (!idea) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container mx-auto px-8 py-24 max-w-4xl">
+          <Skeleton className="h-6 w-32 mb-8" />
+          <Skeleton className="h-12 w-3/4 mb-6" />
+          <Skeleton className="h-6 w-full mb-4" />
+          <Skeleton className="h-6 w-2/3 mb-8" />
+          <div className="space-y-4">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error || !idea) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -142,8 +60,8 @@ const IdeaDumpDetail = () => {
         <article>
           <header className="mb-12 pb-8 border-b border-border">
             <div className="text-sm text-muted-foreground uppercase tracking-widest font-mono mb-4">
-              <time dateTime={idea.date}>
-                {new Date(idea.date).toLocaleDateString('en-US', { 
+              <time dateTime={idea.published_date || idea.created_at}>
+                {new Date(idea.published_date || idea.created_at).toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
@@ -168,7 +86,7 @@ const IdeaDumpDetail = () => {
           </header>
 
           <div className="prose prose-lg max-w-none">
-            {idea.content.split('\n').map((paragraph, index) => {
+            {idea.content?.split('\n').map((paragraph, index) => {
               if (paragraph.trim().startsWith('##')) {
                 return (
                   <h2 key={index} className="text-3xl font-serif font-bold mt-12 mb-4">
