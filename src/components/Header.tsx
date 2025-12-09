@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Home, Brain, Lightbulb, BookOpen, Briefcase, Mail } from "lucide-react";
+import { Menu, Home, Brain, Lightbulb, BookOpen, Briefcase, Mail, User, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 import { LucideIcon } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const navigation: { name: string; path: string; icon: LucideIcon }[] = [
   { name: "Home", path: "/", icon: Home },
@@ -17,6 +18,7 @@ const navigation: { name: string; path: string; icon: LucideIcon }[] = [
 export const Header = () => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const { user, isAdmin } = useAuth();
 
   const NavLink = ({ name, path, icon: Icon, mobile = false }: { name: string; path: string; icon: LucideIcon; mobile?: boolean }) => {
     const isActive = location.pathname === path;
@@ -51,6 +53,8 @@ export const Header = () => {
           {navigation.map((item) => (
             <NavLink key={item.path} {...item} />
           ))}
+          {isAdmin && <NavLink name="Admin" path="/admin" icon={Settings} />}
+          {!user && <NavLink name="Login" path="/auth" icon={User} />}
         </div>
 
         {/* Mobile Navigation */}
@@ -65,6 +69,8 @@ export const Header = () => {
               {navigation.map((item) => (
                 <NavLink key={item.path} {...item} mobile />
               ))}
+              {isAdmin && <NavLink name="Admin" path="/admin" icon={Settings} mobile />}
+              {!user && <NavLink name="Login" path="/auth" icon={User} mobile />}
             </div>
           </SheetContent>
         </Sheet>
