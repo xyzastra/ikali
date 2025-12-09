@@ -41,27 +41,27 @@ const Index = () => {
   const sections = [
     {
       title: "Projects",
-      description: "Energy systems, academic platforms, and compliance-first architectures built for local constraints.",
+      description: "Energy, platforms, and compliance-first systems.",
       path: "/projects",
     },
     {
-      title: "Idea Dumps",
-      description: "Raw concepts exploring decentralized solutions, policy frameworks, and student innovation.",
+      title: "Ideas",
+      description: "Raw concepts and policy frameworks.",
       path: "/idea-dumps",
     },
     {
       title: "Journal",
-      description: "Reflections on bridging hardware, policy, and education through strategic systems work.",
+      description: "Notes on hardware, policy, and education.",
       path: "/journal",
     },
     {
       title: "Resume",
-      description: "Professional experience in energy, manufacturing, and education consulting.",
+      description: "Energy and manufacturing experience.",
       path: "/resume",
     },
     {
       title: "Contact",
-      description: "Get in touch for collaboration, questions, or opportunities.",
+      description: "Collaborate or connect.",
       path: "/contact",
     },
   ];
@@ -94,25 +94,24 @@ const Index = () => {
           </Carousel>
         </section>
 
-        {/* Sections Grid */}
-        <section className="container mx-auto px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-24 max-w-6xl">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-12">
+        {/* Sections Grid - Mobile First */}
+        <section className="container mx-auto px-4 py-8 sm:py-12 max-w-4xl">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             {sections.map((section) => (
               <Link
                 key={section.path}
                 to={section.path}
-                className="group relative border border-border rounded-lg p-6 sm:p-8 md:p-10 lg:p-12 hover:bg-muted/50 hover:border-primary/20 transition-all duration-300 active:scale-[0.98]"
+                className="group border border-border rounded-lg p-4 hover:bg-muted/50 hover:border-primary/30 transition-all duration-200 active:scale-[0.97]"
               >
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold mb-2 sm:mb-3 md:mb-4 group-hover:text-primary transition-colors">
+                <h3 className="text-sm sm:text-base font-semibold mb-1 group-hover:text-primary transition-colors">
                   {section.title}
-                </h2>
-                <p className="text-muted-foreground text-sm sm:text-base md:text-lg leading-relaxed line-clamp-3">
+                </h3>
+                <p className="text-muted-foreground text-xs leading-relaxed line-clamp-2">
                   {section.description}
                 </p>
-                <div className="mt-4 sm:mt-5 md:mt-6 text-xs sm:text-sm uppercase tracking-widest font-medium text-primary opacity-70 group-hover:opacity-100 transition-opacity flex items-center gap-2">
-                  Explore 
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </div>
+                <span className="mt-2 text-[10px] uppercase tracking-wider text-primary/70 group-hover:text-primary transition-colors flex items-center gap-1">
+                  View <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                </span>
               </Link>
             ))}
           </div>
