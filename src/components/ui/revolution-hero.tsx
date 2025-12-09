@@ -525,10 +525,10 @@ export default function WebGLHero() {
       <div className="relative z-10 h-full flex flex-col justify-between p-8 md:p-12">
         <div ref={heroTextRef} className="text-left">
           <p className="text-gray-300 text-sm md:text-base uppercase tracking-wider font-bold">
-            {"Personal Knowledge Base"}
+            {"Local Logic. Decentralized Solutions."}
           </p>
           <p className="text-gray-300 text-sm md:text-base uppercase tracking-wider font-bold">
-            {"Explore My Digital Brain"}
+            {"Strategist & Systems Architect"}
           </p>
         </div>
 
@@ -542,14 +542,14 @@ export default function WebGLHero() {
           </nav>
 
           <div ref={ctaRef} className="text-right text-gray-300 text-xs md:text-sm max-w-xs">
-            <p className="mb-2 font-semibold text-white">{"Documenting thoughts,"}</p>
-            <p className="mb-2 font-semibold text-white">{"projects, and ideas"}</p>
-            <p className="mb-4 text-gray-400">{"A living repository of my creative journey"}</p>
-            <p className="mb-2 text-gray-400">{"Built with passion."}</p>
-            <p className="mb-2 text-gray-400">{"Designed for exploration."}</p>
-            <p className="mb-6 text-gray-400">{"Always evolving."}</p>
-            <p className="text-transparent bg-gradient-to-r from-pink-400 to-cyan-400 bg-clip-text font-bold">
-              brainOS
+            <p className="mb-2 font-semibold text-white">{"Bridging metered hardware,"}</p>
+            <p className="mb-2 font-semibold text-white">{"student innovation, and state policy"}</p>
+            <p className="mb-4 text-gray-400">{"No one-size-fits-all solutions"}</p>
+            <p className="mb-2 text-gray-400">{"Energy systems. Academic platforms."}</p>
+            <p className="mb-2 text-gray-400">{"Built for local constraints."}</p>
+            <p className="mb-6 text-gray-400">{"Compliance-first architecture."}</p>
+            <p className="text-transparent bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text font-bold">
+              Proven Impact
             </p>
           </div>
         </div>
