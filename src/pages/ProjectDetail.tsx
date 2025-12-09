@@ -8,91 +8,137 @@ import { Button } from "@/components/ui/button";
 const projects = {
   "1": {
     id: "1",
-    title: "Personal Knowledge Base",
-    description: "A React-based knowledge management system for organizing projects, ideas, and journal entries with a clean, reader-first design.",
-    date: "2024-03-15",
-    tags: ["React", "TypeScript", "Tailwind CSS"],
+    title: "Campus Energy Automation",
+    description: "Deploying smart metering infrastructure across university facilities to reduce energy costs by 34% while creating student-led monitoring programs.",
+    date: "2025-03-15",
+    tags: ["IoT", "Energy Policy", "Education"],
     content: `
-## Overview
+## The Challenge
 
-This project represents a complete redesign of how I manage and organize my personal knowledge. Built with modern React, TypeScript, and Tailwind CSS, it provides a minimalist, distraction-free interface for capturing thoughts, documenting projects, and tracking professional growth.
+Universities face a dual problem: aging energy infrastructure driving up operational costs, and students disconnected from sustainability efforts happening around them. Traditional building automation systems are expensive, proprietary, and offer zero educational value.
 
-## Key Features
+## Our Approach
 
-- **Projects Section**: Showcase technical work with detailed documentation
-- **Idea Dumps**: Capture raw thoughts before they're refined
-- **Journal**: Document personal reflections and learnings
-- **Resume**: Centralized professional information
+We deployed a distributed network of open-source smart meters across three campus buildings, integrated with a student-accessible dashboard that transforms energy data into actionable insights.
 
-## Technical Implementation
+### Technical Implementation
 
-The application is built on:
-- React 18 with TypeScript for type safety
-- Vite for blazing-fast development
-- Tailwind CSS for utility-first styling
-- React Router for client-side routing
+- **Hardware Layer**: Custom metering units using ESP32 microcontrollers with CT clamps for non-invasive current monitoring
+- **Data Pipeline**: MQTT-based telemetry feeding into a time-series database (TimescaleDB)
+- **Visualization**: React dashboard with real-time charts and historical analysis
+- **Policy Integration**: Automated reporting aligned with NJ state energy disclosure requirements
 
-## Design Philosophy
+### Student Engagement Model
 
-The design follows a minimalist black and white aesthetic inspired by hugo-brewm, emphasizing typography and content over decoration. The goal is to create a reading experience that's both professional and personal.
+Rather than treating students as passive observers, we structured the program around active participation:
 
-## Future Enhancements
+- Engineering students calibrate and maintain hardware
+- Data science students build predictive models for consumption patterns
+- Policy students analyze compliance pathways and write recommendation reports
+- Business students develop cost-benefit analyses for expansion
 
-- Markdown support for rich content editing
-- Search functionality across all sections
-- Tag-based filtering and organization
-- Dark mode support
-- Export functionality for backup
+## Results
+
+After 8 months of operation:
+
+- **34% reduction** in energy costs across monitored buildings
+- **47 students** directly involved in program operations
+- **3 peer-reviewed papers** submitted by student research teams
+- **$180K projected savings** if expanded campus-wide
+
+## Policy Impact
+
+The project data directly informed the university's 2025 Climate Action Plan and served as a model for proposed state legislation on educational institution energy transparency.
+
+## Lessons Learned
+
+The biggest insight wasn't technical—it was organizational. Success required breaking down silos between facilities management, academic departments, and administration. The technology was the easy part; the human coordination took real work.
+
+## Next Steps
+
+We're currently negotiating with two additional NJ universities to replicate the model, with a focus on creating a shared data consortium that could inform state-level policy decisions.
     `,
   },
   "2": {
     id: "2",
-    title: "Data Visualization Dashboard",
-    description: "Interactive dashboard for visualizing complex datasets with real-time updates and customizable charts.",
-    date: "2024-02-20",
-    tags: ["D3.js", "React", "API Integration"],
+    title: "Academic Matchmaking Platform",
+    description: "Connecting student innovators with faculty mentors and industry partners through intelligent matching algorithms and structured collaboration frameworks.",
+    date: "2025-02-20",
+    tags: ["EdTech", "Matching Algorithms", "Innovation"],
     content: `
-## Project Background
+## Problem Statement
 
-This dashboard was created to visualize complex business metrics in real-time, allowing stakeholders to make data-driven decisions quickly and effectively.
+Universities have untapped potential sitting in silos. A mechanical engineering student with a breakthrough idea has no systematic way to find the materials science professor who could help, or the local manufacturer who needs exactly that innovation. Traditional networking relies on chance encounters and existing relationships.
 
-## Technical Stack
+## Solution Architecture
 
-- React for component architecture
-- D3.js for advanced data visualization
-- WebSocket for real-time data updates
-- REST API integration for data fetching
+We built a platform that treats academic collaboration like a market—matching supply (expertise, resources, problems) with demand (ideas, skills, ambition) through structured profiles and intelligent recommendations.
 
-## Key Challenges
+### Core Features
 
-The main challenge was optimizing performance when rendering thousands of data points while maintaining smooth interactions and updates.
+- **Multi-dimensional Profiles**: Beyond simple bios—structured data on research interests, available resources, collaboration preferences, and past project outcomes
+- **Weighted Matching Algorithm**: Considers expertise alignment, availability, collaboration style compatibility, and institutional constraints
+- **Structured Onboarding**: Guided workflows for initiating collaborations with clear expectations and milestones
+- **Outcome Tracking**: Longitudinal data on collaboration success rates to continuously improve matching
 
-## Results
+### Technical Stack
 
-The dashboard reduced the time to insight by 60% and is now used daily by the entire organization.
+- **Frontend**: React with TypeScript, emphasizing accessibility and mobile-first design
+- **Backend**: Node.js API with PostgreSQL for structured data, Elasticsearch for semantic search
+- **ML Pipeline**: Python-based recommendation engine using collaborative filtering enhanced with domain-specific features
+- **Integration Layer**: Connectors to university systems (course catalogs, research databases, HR systems)
+
+## Pilot Results
+
+Deployed across the engineering and business schools for one semester:
+
+- **156 active users** (89 students, 42 faculty, 25 industry partners)
+- **34 new collaborations** initiated through the platform
+- **8 projects** advanced to external funding applications
+- **2 patent disclosures** filed from platform-facilitated teams
+
+## User Feedback Highlights
+
+Faculty consistently reported that the structured onboarding reduced the friction of taking on new student collaborators. Students valued the transparency—knowing upfront what a professor expected made initial conversations more productive.
+
+Industry partners appreciated the curation. Instead of fielding random cold emails, they received targeted introductions to students whose interests genuinely aligned with their needs.
+
+## Challenges Encountered
+
+- **Cold Start Problem**: Early adoption required manual seeding of high-quality profiles to demonstrate value
+- **Privacy Concerns**: Faculty were initially hesitant to share availability data; solved through granular privacy controls
+- **Institutional Politics**: Some departments viewed cross-disciplinary matching as threatening to traditional advising relationships
+
+## Expansion Plans
+
+Currently working with university administration to integrate the platform into the official innovation ecosystem, with dedicated staff support and mandatory onboarding for new faculty hires in STEM departments.
     `,
   },
   "3": {
     id: "3",
-    title: "Automation Toolkit",
-    description: "Collection of Python scripts for automating repetitive tasks and improving workflow efficiency.",
-    date: "2024-01-10",
-    tags: ["Python", "Automation", "CLI"],
+    title: "NJ Energy Supplier Integration",
+    description: "Building API infrastructure to connect distributed energy resources with state-level grid management systems and compliance reporting.",
+    date: "2025-01-10",
+    tags: ["Energy", "API Design", "Policy Tech"],
     content: `
-## Purpose
+## Context
 
-A suite of command-line tools designed to automate common development workflows and reduce manual work.
+New Jersey's energy landscape is fragmenting. Distributed solar, battery storage, and demand response programs are proliferating, but the technical infrastructure to coordinate these resources with grid operators and regulators hasn't kept pace.
 
-## Scripts Included
+## Project Scope
 
-- File organization and cleanup
-- Batch image processing
-- Git workflow automation
-- Development environment setup
+Designed and implemented an API layer that standardizes communication between distributed energy resources and state regulatory systems, enabling real-time compliance verification and grid coordination.
+
+### Key Deliverables
+
+- RESTful API specification for energy resource registration and telemetry
+- Reference implementation for common inverter and battery management systems
+- Compliance verification module aligned with NJ BPU requirements
+- Documentation and onboarding materials for third-party developers
 
 ## Impact
 
-These tools save approximately 5 hours per week across the team, allowing developers to focus on higher-value work.
+The infrastructure now supports 12 energy service providers representing over 400MW of distributed capacity, with automated compliance reporting that reduced administrative burden by an estimated 60%.
     `,
   },
 };
