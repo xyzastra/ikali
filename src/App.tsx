@@ -11,6 +11,7 @@ import IdeaDumpDetail from "./pages/IdeaDumpDetail";
 import Journal from "./pages/Journal";
 import JournalDetail from "./pages/JournalDetail";
 import Resume from "./pages/Resume";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => {
               <Route path="/journal" element={<Journal />} />
               <Route path="/journal/:id" element={<JournalDetail />} />
               <Route path="/resume" element={<Resume />} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
