@@ -230,6 +230,43 @@ const ProjectDetail = () => {
             })}
           </div>
         </article>
+
+        {/* Related Projects Section */}
+        <section className="mt-24 pt-12 border-t border-border">
+          <h2 className="text-2xl font-serif font-bold mb-8 uppercase tracking-widest">Related Projects</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            {Object.values(projects)
+              .filter((p) => p.id !== project.id)
+              .slice(0, 2)
+              .map((relatedProject) => (
+                <Link
+                  key={relatedProject.id}
+                  to={`/projects/${relatedProject.id}`}
+                  className="group block p-6 border border-border rounded-sm hover:bg-muted/50 transition-colors"
+                >
+                  <div className="text-xs text-muted-foreground uppercase tracking-widest font-mono mb-2">
+                    {new Date(relatedProject.date).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'short'
+                    })}
+                  </div>
+                  <h3 className="text-xl font-serif font-bold mb-2 group-hover:opacity-70 transition-opacity">
+                    {relatedProject.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm line-clamp-2">
+                    {relatedProject.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {relatedProject.tags.slice(0, 2).map((tag) => (
+                      <Badge key={tag} variant="outline" className="font-mono text-xs uppercase tracking-wider">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </Link>
+              ))}
+          </div>
+        </section>
       </main>
     </div>
   );
