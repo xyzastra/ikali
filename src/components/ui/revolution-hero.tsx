@@ -499,15 +499,7 @@ export default function WebGLHero() {
               </NavLink>)}
           </nav>
 
-          <div ref={ctaRef} className="text-left sm:text-right text-gray-300 text-xs sm:text-sm max-w-xs order-1 md:order-2">
-            <p className="mb-1 sm:mb-2 font-semibold text-white">{"Bridging metered hardware,"}</p>
-            <p className="mb-1 sm:mb-2 font-semibold text-white">{"student innovation, and state policy"}</p>
-            <p className="mb-2 sm:mb-4 text-gray-400">{"No one-size-fits-all solutions"}</p>
-            <p className="mb-1 sm:mb-2 text-gray-400">{"Energy systems. Academic platforms."}</p>
-            <p className="mb-1 sm:mb-2 text-gray-400">{"Built for local constraints."}</p>
-            <p className="mb-4 sm:mb-6 text-gray-400">{"Compliance-first architecture."}</p>
-            
-          </div>
+          
         </div>
       </div>
     </section>;
