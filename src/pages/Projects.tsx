@@ -4,32 +4,32 @@ import { FeedItem } from "@/components/FeedItem";
 import { Carousel, CarouselItem } from "@/components/Carousel";
 import flowLinesVertical from "@/assets/flow-lines-vertical.svg";
 
-// Sample project data with cover images
+// Project data - Energy, Education, Policy focus
 const projects = [
   {
     id: "1",
-    title: "Personal Knowledge Base",
-    description: "A React-based knowledge management system for organizing projects, ideas, and journal entries with a clean, reader-first design.",
-    date: "2024-03-15",
-    tags: ["React", "TypeScript", "Tailwind CSS"],
+    title: "Campus Energy Automation",
+    description: "AI-driven system to flag overconsumption across heating, grid power, and solar on college campuses. Built with localized logic to avoid constant micromanagement.",
+    date: "2025-03-15",
+    tags: ["Energy", "AI", "Hardware Integration"],
     coverImage: flowLinesVertical,
-    readingTime: 5,
+    readingTime: 6,
   },
   {
     id: "2",
-    title: "Data Visualization Dashboard",
-    description: "Interactive dashboard for visualizing complex datasets with real-time updates and customizable charts.",
-    date: "2024-02-20",
-    tags: ["D3.js", "React", "API Integration"],
-    readingTime: 8,
+    title: "Academic Matchmaking Platform",
+    description: "Decentralized platform replacing low-scale vendor outsourcing with student-powered work. Connects departments with aligned students for credit and hands-on experience.",
+    date: "2025-02-10",
+    tags: ["Education", "Platform", "Penn State"],
+    readingTime: 5,
   },
   {
     id: "3",
-    title: "Automation Toolkit",
-    description: "Collection of Python scripts for automating repetitive tasks and improving workflow efficiency.",
-    date: "2024-01-10",
-    tags: ["Python", "Automation", "CLI"],
-    readingTime: 6,
+    title: "NJ Energy Supplier Integration",
+    description: "Designed compliance-first architecture for metered hardware integration, combining sensor data with localized decision logic.",
+    date: "2025-01-20",
+    tags: ["Energy", "Compliance", "Localized Logic"],
+    readingTime: 7,
   },
 ];
 
@@ -42,7 +42,7 @@ const Projects = () => {
         <div className="flex items-center justify-between mb-8">
           <SectionHeader
             title="Projects"
-            description="A showcase of technical projects, experiments, and builds that represent my journey in software development and creative problem-solving."
+            description="Energy systems, academic platforms, and compliance-first architectures. Each built for the specific constraints of its local environment."
           />
           <a
             href="https://photos.app.goo.gl/1LkM3S9vfY7EE4Do9"

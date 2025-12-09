@@ -2,31 +2,31 @@ import { Header } from "@/components/Header";
 import { SectionHeader } from "@/components/SectionHeader";
 import { FeedItem } from "@/components/FeedItem";
 
-// Sample idea dumps data
+// Idea dumps - Decentralized solutions, Policy frameworks
 const ideaDumps = [
   {
     id: "1",
-    title: "AI-Powered Learning Assistant",
-    description: "Concept for an adaptive learning platform that personalizes content based on individual learning patterns and pace.",
-    date: "2024-03-18",
-    tags: ["AI", "Education", "Concept"],
-    readingTime: 3,
-  },
-  {
-    id: "2",
-    title: "Decentralized Knowledge Sharing",
-    description: "Exploring blockchain-based systems for preserving and sharing knowledge across communities without centralized control.",
-    date: "2024-03-10",
-    tags: ["Blockchain", "Web3", "Community"],
+    title: "State-Level Energy Policy Framework",
+    description: "Exploring legislative models that incentivize universities to adopt localized energy management without federal dependency.",
+    date: "2025-04-05",
+    tags: ["Policy", "Energy", "Legislation"],
     readingTime: 4,
   },
   {
-    id: "3",
-    title: "Productivity Through Gamification",
-    description: "Ideas for incorporating game mechanics into daily productivity tools to increase motivation and engagement.",
-    date: "2024-02-28",
-    tags: ["Gamification", "Productivity", "UX"],
+    id: "2",
+    title: "Student-Powered Manufacturing",
+    description: "Scaling the academic matchmaking model to manufacturing partnerships. Credit-based work replacing traditional internships.",
+    date: "2025-03-22",
+    tags: ["Education", "Manufacturing", "Innovation"],
     readingTime: 3,
+  },
+  {
+    id: "3",
+    title: "Metered Hardware Standards",
+    description: "Proposing open standards for campus metering devices to enable cross-institutional data sharing without vendor lock-in.",
+    date: "2025-02-15",
+    tags: ["Hardware", "Standards", "Open Source"],
+    readingTime: 5,
   },
 ];
 
@@ -38,7 +38,7 @@ const IdeaDumps = () => {
       <main className="container mx-auto px-8 py-24 max-w-6xl">
         <SectionHeader
           title="Idea Dumps"
-          description="Raw thoughts, unfiltered concepts, and creative brainstorms. This is where ideas are born before they're refined into full projects."
+          description="Raw concepts exploring policy frameworks, decentralized systems, and student-powered innovation. Ideas before refinement."
         />
 
         <div className="grid md:grid-cols-2 gap-8">
