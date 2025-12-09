@@ -3,21 +3,61 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>brainOS - Personal Knowledge Base</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inconsolata:wght@400;500;600&family=Inter:wght@400;500;600&family=Lexend+Deca:wght@400;500;600&display=swap" rel="stylesheet">
     <meta name="description" content="A personal knowledge base for organizing projects, ideas, journal entries, and professional achievements." />
     <meta name="author" content="brainOS" />
+    <link rel="canonical" href="https://brainos.dev/" />
 
+    <!-- Open Graph -->
     <meta property="og:title" content="brainOS - Personal Knowledge Base" />
     <meta property="og:description" content="A personal knowledge base for organizing projects, ideas, journal entries, and professional achievements." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:url" content="https://brainos.dev/" />
+    <meta property="og:image" content="/og-image.png" />
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:title" content="brainOS - Personal Knowledge Base" />
+    <meta name="twitter:description" content="A personal knowledge base for organizing projects, ideas, journal entries, and professional achievements." />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inconsolata:wght@400;500;600&family=Inter:wght@400;500;600&family=Lexend+Deca:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="/favicon.ico" />
+
+    <!-- Organization Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "brainOS",
+      "url": "https://brainos.dev",
+      "logo": "https://brainos.dev/logo.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "general",
+        "email": "hello@brainos.dev"
+      }
+    }
+    </script>
+
+    <!-- BreadcrumbList Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://brainos.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://brainos.dev/projects" },
+        { "@type": "ListItem", "position": 3, "name": "Idea Dumps", "item": "https://brainos.dev/idea-dumps" },
+        { "@type": "ListItem", "position": 4, "name": "Journal", "item": "https://brainos.dev/journal" }
+      ]
+    }
+    </script>
   </head>
 
   <body>
