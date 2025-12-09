@@ -1,17 +1,14 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useEffect, useRef, useState } from "react"
-import { gsap } from "gsap"
-
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 const vertexShader = `
   attribute vec4 position;
   void main() {
     gl_Position = position;
   }
-`
-
+`;
 const fragmentShader = `
   precision mediump float;
   uniform float u_time;
@@ -244,283 +241,246 @@ const fragmentShader = `
     
     gl_FragColor = vec4(result, 1.0);
   }
-`
-
+`;
 interface NavLinkProps {
-  children: React.ReactNode
-  href: string
-  gradient: string
-  index: number
+  children: React.ReactNode;
+  href: string;
+  gradient: string;
+  index: number;
 }
-
-function NavLink({ children, href, gradient, index }: NavLinkProps) {
-  const linkRef = useRef<HTMLAnchorElement>(null)
-  const [isHovered, setIsHovered] = useState(false)
-
+function NavLink({
+  children,
+  href,
+  gradient,
+  index
+}: NavLinkProps) {
+  const linkRef = useRef<HTMLAnchorElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
   useEffect(() => {
-    const link = linkRef.current
-    if (!link) return
-
+    const link = linkRef.current;
+    if (!link) return;
     const handleMouseEnter = () => {
-      setIsHovered(true)
+      setIsHovered(true);
       gsap.to(link, {
         scale: 1.05,
         rotationX: -2,
         z: 20,
         duration: 0.6,
-        ease: "power3.out",
-      })
-
+        ease: "power3.out"
+      });
       gsap.to(link, {
         textShadow: "0 5px 20px rgba(255,255,255,0.2)",
         duration: 0.5,
-        ease: "power3.out",
-      })
-    }
-
+        ease: "power3.out"
+      });
+    };
     const handleMouseLeave = () => {
-      setIsHovered(false)
+      setIsHovered(false);
       gsap.to(link, {
         scale: 1,
         rotationX: 0,
         z: 0,
         duration: 0.6,
-        ease: "power3.out",
-      })
-
+        ease: "power3.out"
+      });
       gsap.to(link, {
         textShadow: "0 0 0px rgba(255,255,255,0)",
         duration: 0.5,
-        ease: "power3.out",
-      })
-    }
-
-    link.addEventListener("mouseenter", handleMouseEnter)
-    link.addEventListener("mouseleave", handleMouseLeave)
-
+        ease: "power3.out"
+      });
+    };
+    link.addEventListener("mouseenter", handleMouseEnter);
+    link.addEventListener("mouseleave", handleMouseLeave);
     return () => {
-      link.removeEventListener("mouseenter", handleMouseEnter)
-      link.removeEventListener("mouseleave", handleMouseLeave)
-    }
-  }, [])
-
-  return (
-    <a
-      ref={linkRef}
-      href={href}
-      className={`block mb-2 text-4xl md:text-6xl lg:text-8xl font-black leading-tight cursor-pointer transition-all duration-300 transform-gpu perspective-1000 ${
-        isHovered ? "z-10" : ""
-      }`}
-      style={{
-        background: gradient,
-        WebkitBackgroundClip: "text",
-        backgroundClip: "text",
-        color: "transparent",
-        filter: isHovered ? "brightness(1.2) saturate(1.3)" : "brightness(1) saturate(1)",
-      }}
-    >
+      link.removeEventListener("mouseenter", handleMouseEnter);
+      link.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+  return <a ref={linkRef} href={href} className={`block mb-2 text-4xl md:text-6xl lg:text-8xl font-black leading-tight cursor-pointer transition-all duration-300 transform-gpu perspective-1000 ${isHovered ? "z-10" : ""}`} style={{
+    background: gradient,
+    WebkitBackgroundClip: "text",
+    backgroundClip: "text",
+    color: "transparent",
+    filter: isHovered ? "brightness(1.2) saturate(1.3)" : "brightness(1) saturate(1)"
+  }}>
       {children}
-    </a>
-  )
+    </a>;
 }
-
 export default function WebGLHero() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const heroTextRef = useRef<HTMLDivElement>(null)
-  const navRef = useRef<HTMLDivElement>(null)
-  const ctaRef = useRef<HTMLDivElement>(null)
-  const mouseRef = useRef({ x: 0, y: 0 })
-  const glRef = useRef<WebGLRenderingContext | null>(null)
-  const programRef = useRef<WebGLProgram | null>(null)
-  const bufferRef = useRef<WebGLBuffer | null>(null)
-  const positionLocationRef = useRef<number>(0)
-  const timeLocationRef = useRef<WebGLUniformLocation | null>(null)
-  const resolutionLocationRef = useRef<WebGLUniformLocation | null>(null)
-  const mouseLocationRef = useRef<WebGLUniformLocation | null>(null)
-  const intensityLocationRef = useRef<WebGLUniformLocation | null>(null)
-  const startTimeRef = useRef<number>(Date.now())
-  const [globalIntensity, setGlobalIntensity] = useState(1.0)
-
-  const navLinks = [
-    { text: "PROJECTS", href: "/projects", gradient: "linear-gradient(135deg, #ffffff, #cccccc)" },
-    { text: "JOURNAL", href: "/journal", gradient: "linear-gradient(135deg, #ffffff, #cccccc)" },
-    { text: "IDEAS", href: "/idea-dumps", gradient: "linear-gradient(135deg, #ffffff, #cccccc)" },
-    { text: "RESUME", href: "/resume", gradient: "linear-gradient(135deg, #ffffff, #cccccc)" },
-  ]
-
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const heroTextRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const mouseRef = useRef({
+    x: 0,
+    y: 0
+  });
+  const glRef = useRef<WebGLRenderingContext | null>(null);
+  const programRef = useRef<WebGLProgram | null>(null);
+  const bufferRef = useRef<WebGLBuffer | null>(null);
+  const positionLocationRef = useRef<number>(0);
+  const timeLocationRef = useRef<WebGLUniformLocation | null>(null);
+  const resolutionLocationRef = useRef<WebGLUniformLocation | null>(null);
+  const mouseLocationRef = useRef<WebGLUniformLocation | null>(null);
+  const intensityLocationRef = useRef<WebGLUniformLocation | null>(null);
+  const startTimeRef = useRef<number>(Date.now());
+  const [globalIntensity, setGlobalIntensity] = useState(1.0);
+  const navLinks = [{
+    text: "PROJECTS",
+    href: "/projects",
+    gradient: "linear-gradient(135deg, #ffffff, #cccccc)"
+  }, {
+    text: "JOURNAL",
+    href: "/journal",
+    gradient: "linear-gradient(135deg, #ffffff, #cccccc)"
+  }, {
+    text: "IDEAS",
+    href: "/idea-dumps",
+    gradient: "linear-gradient(135deg, #ffffff, #cccccc)"
+  }, {
+    text: "RESUME",
+    href: "/resume",
+    gradient: "linear-gradient(135deg, #ffffff, #cccccc)"
+  }];
   const createShader = (type: number, source: string) => {
-    const gl = glRef.current
-    if (!gl) return null
-
-    const shader = gl.createShader(type)
-    if (!shader) return null
-
-    gl.shaderSource(shader, source)
-    gl.compileShader(shader)
-
+    const gl = glRef.current;
+    if (!gl) return null;
+    const shader = gl.createShader(type);
+    if (!shader) return null;
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      console.error("Shader compile error:", gl.getShaderInfoLog(shader))
-      gl.deleteShader(shader)
-      return null
+      console.error("Shader compile error:", gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
+      return null;
     }
-
-    return shader
-  }
-
+    return shader;
+  };
   const initGL = () => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const gl = canvas.getContext("webgl")
-    if (!gl) return
-
-    glRef.current = gl
-
-    const vertShader = createShader(gl.VERTEX_SHADER, vertexShader)
-    const fragShader = createShader(gl.FRAGMENT_SHADER, fragmentShader)
-
-    if (!vertShader || !fragShader) return
-
-    const program = gl.createProgram()
-    if (!program) return
-
-    gl.attachShader(program, vertShader)
-    gl.attachShader(program, fragShader)
-    gl.linkProgram(program)
-
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const gl = canvas.getContext("webgl");
+    if (!gl) return;
+    glRef.current = gl;
+    const vertShader = createShader(gl.VERTEX_SHADER, vertexShader);
+    const fragShader = createShader(gl.FRAGMENT_SHADER, fragmentShader);
+    if (!vertShader || !fragShader) return;
+    const program = gl.createProgram();
+    if (!program) return;
+    gl.attachShader(program, vertShader);
+    gl.attachShader(program, fragShader);
+    gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error("Program link error:", gl.getProgramInfoLog(program))
-      return
+      console.error("Program link error:", gl.getProgramInfoLog(program));
+      return;
     }
-
-    programRef.current = program
-
-    const buffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW)
-
-    bufferRef.current = buffer
-
-    const positionLocation = gl.getAttribLocation(program, "position")
-    positionLocationRef.current = positionLocation
-    const timeLocation = gl.getUniformLocation(program, "u_time")
-    timeLocationRef.current = timeLocation
-    const resolutionLocation = gl.getUniformLocation(program, "u_resolution")
-    resolutionLocationRef.current = resolutionLocation
-    const mouseLocation = gl.getUniformLocation(program, "u_mouse")
-    mouseLocationRef.current = mouseLocation
-    const intensityLocation = gl.getUniformLocation(program, "u_intensity")
-    intensityLocationRef.current = intensityLocation
-
+    programRef.current = program;
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    bufferRef.current = buffer;
+    const positionLocation = gl.getAttribLocation(program, "position");
+    positionLocationRef.current = positionLocation;
+    const timeLocation = gl.getUniformLocation(program, "u_time");
+    timeLocationRef.current = timeLocation;
+    const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+    resolutionLocationRef.current = resolutionLocation;
+    const mouseLocation = gl.getUniformLocation(program, "u_mouse");
+    mouseLocationRef.current = mouseLocation;
+    const intensityLocation = gl.getUniformLocation(program, "u_intensity");
+    intensityLocationRef.current = intensityLocation;
     const resizeCanvas = () => {
-      const rect = canvas.getBoundingClientRect()
-      canvas.width = rect.width * window.devicePixelRatio
-      canvas.height = rect.height * window.devicePixelRatio
-      gl.viewport(0, 0, canvas.width, canvas.height)
-    }
-
-    resizeCanvas()
-    window.addEventListener("resize", resizeCanvas)
-
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * window.devicePixelRatio;
+      canvas.height = rect.height * window.devicePixelRatio;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    };
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      mouseRef.current.x = (e.clientX - rect.left) * window.devicePixelRatio
-      mouseRef.current.y = (rect.height - (e.clientY - rect.top)) * window.devicePixelRatio
-
-      gsap.to(
-        { intensity: globalIntensity },
-        {
-          intensity: 1.15,
-          duration: 0.3,
-          ease: "power2.out",
-          onUpdate: function () {
-            setGlobalIntensity(this.targets()[0].intensity)
-          },
-        },
-      )
-
-      gsap.to(
-        { intensity: 1.15 },
-        {
-          intensity: 1.0,
-          duration: 1.0,
-          delay: 0.1,
-          ease: "power2.out",
-          onUpdate: function () {
-            setGlobalIntensity(this.targets()[0].intensity)
-          },
-        },
-      )
-    }
-
-    canvas.addEventListener("mousemove", handleMouseMove)
-  }
-
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current.x = (e.clientX - rect.left) * window.devicePixelRatio;
+      mouseRef.current.y = (rect.height - (e.clientY - rect.top)) * window.devicePixelRatio;
+      gsap.to({
+        intensity: globalIntensity
+      }, {
+        intensity: 1.15,
+        duration: 0.3,
+        ease: "power2.out",
+        onUpdate: function () {
+          setGlobalIntensity(this.targets()[0].intensity);
+        }
+      });
+      gsap.to({
+        intensity: 1.15
+      }, {
+        intensity: 1.0,
+        duration: 1.0,
+        delay: 0.1,
+        ease: "power2.out",
+        onUpdate: function () {
+          setGlobalIntensity(this.targets()[0].intensity);
+        }
+      });
+    };
+    canvas.addEventListener("mousemove", handleMouseMove);
+  };
   const animate = () => {
-    const time = (Date.now() - startTimeRef.current) * 0.001
-    const gl = glRef.current
-    const program = programRef.current
-    const buffer = bufferRef.current
-    const positionLocation = positionLocationRef.current
-    const timeLocation = timeLocationRef.current
-    const resolutionLocation = resolutionLocationRef.current
-    const mouseLocation = mouseLocationRef.current
-    const intensityLocation = intensityLocationRef.current
-
+    const time = (Date.now() - startTimeRef.current) * 0.001;
+    const gl = glRef.current;
+    const program = programRef.current;
+    const buffer = bufferRef.current;
+    const positionLocation = positionLocationRef.current;
+    const timeLocation = timeLocationRef.current;
+    const resolutionLocation = resolutionLocationRef.current;
+    const mouseLocation = mouseLocationRef.current;
+    const intensityLocation = intensityLocationRef.current;
     if (gl && program && buffer && timeLocation && resolutionLocation && mouseLocation && intensityLocation) {
-      gl.useProgram(program)
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-      gl.enableVertexAttribArray(positionLocation)
-      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
-
-      gl.uniform1f(timeLocation, time)
-      gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height)
-      gl.uniform2f(mouseLocation, mouseRef.current.x, mouseRef.current.y)
-      gl.uniform1f(intensityLocation, globalIntensity)
-
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+      gl.useProgram(program);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.enableVertexAttribArray(positionLocation);
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+      gl.uniform1f(timeLocation, time);
+      gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
+      gl.uniform2f(mouseLocation, mouseRef.current.x, mouseRef.current.y);
+      gl.uniform1f(intensityLocation, globalIntensity);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
-    requestAnimationFrame(animate)
-  }
-
+    requestAnimationFrame(animate);
+  };
   useEffect(() => {
-    initGL()
-  }, [])
-
+    initGL();
+  }, []);
   useEffect(() => {
     const animateFrame = () => {
-      const time = (Date.now() - startTimeRef.current) * 0.001
-      const gl = glRef.current
-      const program = programRef.current
-      const buffer = bufferRef.current
-      const positionLocation = positionLocationRef.current
-      const timeLocation = timeLocationRef.current
-      const resolutionLocation = resolutionLocationRef.current
-      const mouseLocation = mouseLocationRef.current
-      const intensityLocation = intensityLocationRef.current
-
+      const time = (Date.now() - startTimeRef.current) * 0.001;
+      const gl = glRef.current;
+      const program = programRef.current;
+      const buffer = bufferRef.current;
+      const positionLocation = positionLocationRef.current;
+      const timeLocation = timeLocationRef.current;
+      const resolutionLocation = resolutionLocationRef.current;
+      const mouseLocation = mouseLocationRef.current;
+      const intensityLocation = intensityLocationRef.current;
       if (gl && program && buffer && timeLocation && resolutionLocation && mouseLocation && intensityLocation) {
-        gl.useProgram(program)
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-        gl.enableVertexAttribArray(positionLocation)
-        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
-
-        gl.uniform1f(timeLocation, time)
-        gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height)
-        gl.uniform2f(mouseLocation, mouseRef.current.x, mouseRef.current.y)
-        gl.uniform1f(intensityLocation, globalIntensity)
-
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+        gl.useProgram(program);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.enableVertexAttribArray(positionLocation);
+        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+        gl.uniform1f(timeLocation, time);
+        gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
+        gl.uniform2f(mouseLocation, mouseRef.current.x, mouseRef.current.y);
+        gl.uniform1f(intensityLocation, globalIntensity);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       }
-      requestAnimationFrame(animateFrame)
-    }
-
-    animateFrame()
-  }, [globalIntensity])
-
-  return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-black">
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ background: "#000510" }} />
+      requestAnimationFrame(animateFrame);
+    };
+    animateFrame();
+  }, [globalIntensity]);
+  return <section className="relative min-h-screen w-full overflow-hidden bg-black">
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{
+      background: "#000510"
+    }} />
 
       <div className="relative z-10 min-h-screen flex flex-col justify-between p-4 py-6 sm:p-6 md:p-8 lg:p-12">
         <div ref={heroTextRef} className="text-left">
@@ -534,11 +494,9 @@ export default function WebGLHero() {
 
         <div className="flex flex-col gap-6 sm:gap-8 md:flex-row md:justify-between md:items-end mt-auto">
           <nav ref={navRef} className="text-left order-2 md:order-1">
-            {navLinks.map((link, index) => (
-              <NavLink key={link.text} href={link.href} gradient={link.gradient} index={index}>
+            {navLinks.map((link, index) => <NavLink key={link.text} href={link.href} gradient={link.gradient} index={index}>
                 {link.text}
-              </NavLink>
-            ))}
+              </NavLink>)}
           </nav>
 
           <div ref={ctaRef} className="text-left sm:text-right text-gray-300 text-xs sm:text-sm max-w-xs order-1 md:order-2">
@@ -548,18 +506,12 @@ export default function WebGLHero() {
             <p className="mb-1 sm:mb-2 text-gray-400">{"Energy systems. Academic platforms."}</p>
             <p className="mb-1 sm:mb-2 text-gray-400">{"Built for local constraints."}</p>
             <p className="mb-4 sm:mb-6 text-gray-400">{"Compliance-first architecture."}</p>
-            <p className="text-transparent bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text font-bold">
-              Proven Impact
-            </p>
+            
           </div>
         </div>
       </div>
-    </section>
-  )
+    </section>;
 }
-
 export const Component = () => {
-  return (
-    <WebGLHero />
-  )
-}
+  return <WebGLHero />;
+};
