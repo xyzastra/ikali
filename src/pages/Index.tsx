@@ -5,33 +5,33 @@ import { FeedItem } from "@/components/FeedItem";
 import { Component as RevolutionHero } from "@/components/ui/revolution-hero";
 import flowLinesVertical from "@/assets/flow-lines-vertical.svg";
 
-// Sample featured content
+// Featured content - Energy, Education, Policy
 const featuredProjects = [
   {
     id: "1",
-    title: "Personal Knowledge Base",
-    description: "A React-based knowledge management system for organizing projects, ideas, and journal entries with a clean, reader-first design.",
-    date: "2024-03-15",
-    tags: ["React", "TypeScript", "Tailwind CSS"],
+    title: "Campus Energy Automation",
+    description: "AI-driven system to flag overconsumption across heating, grid power, and solar on college campuses. Combines metered hardware with localized logic.",
+    date: "2025-03-15",
+    tags: ["Energy", "AI", "Hardware Integration"],
     coverImage: flowLinesVertical,
-    readingTime: 5,
+    readingTime: 6,
     type: "project" as const,
   },
   {
     id: "2",
-    title: "Data Visualization Dashboard",
-    description: "Interactive dashboard for visualizing complex datasets with real-time updates and customizable charts.",
-    date: "2024-02-20",
-    tags: ["D3.js", "React", "API Integration"],
-    readingTime: 8,
+    title: "Academic Matchmaking Platform",
+    description: "Decentralized platform connecting academic departments with aligned students for credit-based, hands-on project work.",
+    date: "2025-02-10",
+    tags: ["Education", "Platform", "Student-Powered"],
+    readingTime: 5,
     type: "project" as const,
   },
   {
     id: "1",
-    title: "Reflections on Building in Public",
-    description: "Thoughts on sharing my learning journey openly and the unexpected benefits of transparency in the development process.",
-    date: "2024-03-20",
-    tags: ["Learning", "Community", "Growth"],
+    title: "Policy Strategy for University Innovation",
+    description: "Advancing legislation in Pennsylvania to support decentralized, student-driven impact at universities.",
+    date: "2025-04-01",
+    tags: ["Policy", "Advocacy", "Higher Ed"],
     readingTime: 4,
     type: "journal" as const,
   },
@@ -41,22 +41,22 @@ const Index = () => {
   const sections = [
     {
       title: "Projects",
-      description: "Technical projects, experiments, and builds showcasing my work and learning journey.",
+      description: "Energy systems, academic platforms, and compliance-first architectures built for local constraints.",
       path: "/projects",
     },
     {
       title: "Idea Dumps",
-      description: "Raw thoughts, concepts, and brainstorms—a collection of ideas waiting to be refined.",
+      description: "Raw concepts exploring decentralized solutions, policy frameworks, and student innovation.",
       path: "/idea-dumps",
     },
     {
       title: "Journal",
-      description: "Personal reflections, learnings, and experiences documented over time.",
+      description: "Reflections on bridging hardware, policy, and education through strategic systems work.",
       path: "/journal",
     },
     {
       title: "Resume",
-      description: "Professional experience, skills, and achievements in one place.",
+      description: "Professional experience in energy, manufacturing, and education consulting.",
       path: "/resume",
     },
   ];
