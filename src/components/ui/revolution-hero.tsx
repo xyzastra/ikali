@@ -519,21 +519,21 @@ export default function WebGLHero() {
   }, [globalIntensity])
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black">
+    <section className="relative min-h-screen w-full overflow-hidden bg-black">
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ background: "#000510" }} />
 
-      <div className="relative z-10 h-full flex flex-col justify-between p-8 md:p-12">
+      <div className="relative z-10 min-h-screen flex flex-col justify-between p-4 py-6 sm:p-6 md:p-8 lg:p-12">
         <div ref={heroTextRef} className="text-left">
-          <p className="text-gray-300 text-sm md:text-base uppercase tracking-wider font-bold">
+          <p className="text-gray-300 text-xs sm:text-sm md:text-base uppercase tracking-wider font-bold">
             {"Local Logic. Decentralized Solutions."}
           </p>
-          <p className="text-gray-300 text-sm md:text-base uppercase tracking-wider font-bold">
+          <p className="text-gray-300 text-xs sm:text-sm md:text-base uppercase tracking-wider font-bold">
             {"Strategist & Systems Architect"}
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-end">
-          <nav ref={navRef} className="text-left mb-8 md:mb-0">
+        <div className="flex flex-col gap-6 sm:gap-8 md:flex-row md:justify-between md:items-end mt-auto">
+          <nav ref={navRef} className="text-left order-2 md:order-1">
             {navLinks.map((link, index) => (
               <NavLink key={link.text} href={link.href} gradient={link.gradient} index={index}>
                 {link.text}
@@ -541,13 +541,13 @@ export default function WebGLHero() {
             ))}
           </nav>
 
-          <div ref={ctaRef} className="text-right text-gray-300 text-xs md:text-sm max-w-xs">
-            <p className="mb-2 font-semibold text-white">{"Bridging metered hardware,"}</p>
-            <p className="mb-2 font-semibold text-white">{"student innovation, and state policy"}</p>
-            <p className="mb-4 text-gray-400">{"No one-size-fits-all solutions"}</p>
-            <p className="mb-2 text-gray-400">{"Energy systems. Academic platforms."}</p>
-            <p className="mb-2 text-gray-400">{"Built for local constraints."}</p>
-            <p className="mb-6 text-gray-400">{"Compliance-first architecture."}</p>
+          <div ref={ctaRef} className="text-left sm:text-right text-gray-300 text-xs sm:text-sm max-w-xs order-1 md:order-2">
+            <p className="mb-1 sm:mb-2 font-semibold text-white">{"Bridging metered hardware,"}</p>
+            <p className="mb-1 sm:mb-2 font-semibold text-white">{"student innovation, and state policy"}</p>
+            <p className="mb-2 sm:mb-4 text-gray-400">{"No one-size-fits-all solutions"}</p>
+            <p className="mb-1 sm:mb-2 text-gray-400">{"Energy systems. Academic platforms."}</p>
+            <p className="mb-1 sm:mb-2 text-gray-400">{"Built for local constraints."}</p>
+            <p className="mb-4 sm:mb-6 text-gray-400">{"Compliance-first architecture."}</p>
             <p className="text-transparent bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text font-bold">
               Proven Impact
             </p>
