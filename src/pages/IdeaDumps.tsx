@@ -1,36 +1,12 @@
 import { Header } from "@/components/Header";
 import { SectionHeader } from "@/components/SectionHeader";
 import { FeedItem } from "@/components/FeedItem";
-
-// Idea dumps - Decentralized solutions, Policy frameworks
-const ideaDumps = [
-  {
-    id: "1",
-    title: "State-Level Energy Policy Framework",
-    description: "Exploring legislative models that incentivize universities to adopt localized energy management without federal dependency.",
-    date: "2025-04-05",
-    tags: ["Policy", "Energy", "Legislation"],
-    readingTime: 4,
-  },
-  {
-    id: "2",
-    title: "Student-Powered Manufacturing",
-    description: "Scaling the academic matchmaking model to manufacturing partnerships. Credit-based work replacing traditional internships.",
-    date: "2025-03-22",
-    tags: ["Education", "Manufacturing", "Innovation"],
-    readingTime: 3,
-  },
-  {
-    id: "3",
-    title: "Metered Hardware Standards",
-    description: "Proposing open standards for campus metering devices to enable cross-institutional data sharing without vendor lock-in.",
-    date: "2025-02-15",
-    tags: ["Hardware", "Standards", "Open Source"],
-    readingTime: 5,
-  },
-];
+import { useIdeaDumps } from "@/hooks/useIdeaDumps";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const IdeaDumps = () => {
+  const { data: ideaDumps, isLoading, error } = useIdeaDumps();
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -41,21 +17,41 @@ const IdeaDumps = () => {
           description="Raw concepts exploring policy frameworks, decentralized systems, and student-powered innovation. Ideas before refinement."
         />
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {ideaDumps.map((idea) => (
-            <FeedItem
-              key={idea.id}
-              title={idea.title}
-              description={idea.description}
-              date={idea.date}
-              path={`/idea-dumps/${idea.id}`}
-              tags={idea.tags}
-              readingTime={idea.readingTime}
-            />
-          ))}
-        </div>
+        {isLoading && (
+          <div className="grid md:grid-cols-2 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="space-y-4">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+            ))}
+          </div>
+        )}
 
-        {ideaDumps.length === 0 && (
+        {error && (
+          <div className="text-center py-16">
+            <p className="text-destructive text-lg">Error loading ideas. Please try again.</p>
+          </div>
+        )}
+
+        {ideaDumps && ideaDumps.length > 0 && (
+          <div className="grid md:grid-cols-2 gap-8">
+            {ideaDumps.map((idea) => (
+              <FeedItem
+                key={idea.id}
+                title={idea.title}
+                description={idea.description || ""}
+                date={idea.published_date || idea.created_at}
+                path={`/idea-dumps/${idea.id}`}
+                tags={idea.tags}
+                readingTime={idea.reading_time}
+              />
+            ))}
+          </div>
+        )}
+
+        {ideaDumps && ideaDumps.length === 0 && (
           <div className="text-center py-16">
             <p className="text-muted-foreground text-lg">No ideas yet. Let your creativity flow!</p>
           </div>

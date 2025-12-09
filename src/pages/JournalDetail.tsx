@@ -3,124 +3,33 @@ import { Header } from "@/components/Header";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const journalEntries = {
-  "1": {
-    id: "1",
-    title: "Reflections on Building in Public",
-    description: "Thoughts on sharing my learning journey openly and the unexpected benefits of transparency in the development process.",
-    date: "2024-03-20",
-    tags: ["Learning", "Community", "Growth"],
-    content: `
-## Starting the Journey
-
-When I first decided to share my work publicly, I was terrified. What if people judged my code? What if I made mistakes in front of everyone?
-
-## What I've Learned
-
-Building in public has been transformative:
-
-- Accountability drives consistency
-- Community feedback accelerates learning
-- Documenting helps solidify understanding
-- Vulnerability builds genuine connections
-
-## The Unexpected Benefits
-
-The most surprising outcome has been the connections I've made. People reach out to share their own experiences, offer advice, and collaborate on ideas.
-
-## Moving Forward
-
-I'm committed to continuing this practice. The benefits far outweigh the initial discomfort of exposure.
-
-## Key Takeaways
-
-- Start before you're ready
-- Share your struggles, not just successes
-- Engage with your community authentically
-- Document everything—future you will thank present you
-    `,
-  },
-  "2": {
-    id: "2",
-    title: "Overcoming Imposter Syndrome",
-    description: "Personal insights on dealing with self-doubt in tech and strategies that have helped me move forward confidently.",
-    date: "2024-03-12",
-    tags: ["Mental Health", "Career", "Personal"],
-    content: `
-## The Struggle is Real
-
-Even after years in tech, I still sometimes feel like I don't belong. That voice saying "you're not good enough" never fully goes away.
-
-## What Changed
-
-Instead of fighting imposter syndrome, I learned to acknowledge it and move forward anyway:
-
-- Recognize it's a sign I'm growing
-- Focus on progress, not perfection
-- Celebrate small wins
-- Build a support network
-
-## Practical Strategies
-
-What actually helps:
-
-- Keep a "wins" journal
-- Talk openly about struggles
-- Remember: everyone feels this way
-- Measure growth by looking back, not ahead
-
-## The Truth
-
-Imposter syndrome doesn't mean you're an imposter. It means you're challenging yourself.
-    `,
-  },
-  "3": {
-    id: "3",
-    title: "The Power of Documentation",
-    description: "Why I started documenting everything and how it has transformed my approach to learning and problem-solving.",
-    date: "2024-03-05",
-    tags: ["Documentation", "Learning", "Productivity"],
-    content: `
-## Why Document?
-
-I used to think documentation was a waste of time. I was wrong.
-
-## The Transformation
-
-When I started writing everything down:
-
-- Solutions became reusable
-- Learning became deeper
-- Communication became clearer
-- Knowledge became shareable
-
-## My Documentation System
-
-What works for me:
-
-- Daily work logs
-- Project READMEs
-- Personal wiki
-- Code comments
-- This knowledge base
-
-## The Meta Insight
-
-Documenting the documentation process itself has been enlightening. Writing about writing reveals patterns in thinking.
-
-## Advice to My Past Self
-
-Start documenting today. Your future self will thank you. Don't worry about perfection—just start.
-    `,
-  },
-};
+import { useJournalEntry } from "@/hooks/useJournalEntries";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const JournalDetail = () => {
   const { id } = useParams();
-  const entry = id ? journalEntries[id as keyof typeof journalEntries] : null;
+  const { data: entry, isLoading, error } = useJournalEntry(id);
 
-  if (!entry) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container mx-auto px-8 py-24 max-w-4xl">
+          <Skeleton className="h-6 w-32 mb-8" />
+          <Skeleton className="h-12 w-3/4 mb-6" />
+          <Skeleton className="h-6 w-full mb-4" />
+          <Skeleton className="h-6 w-2/3 mb-8" />
+          <div className="space-y-4">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error || !entry) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -151,8 +60,8 @@ const JournalDetail = () => {
         <article>
           <header className="mb-12 pb-8 border-b border-border">
             <div className="text-sm text-muted-foreground uppercase tracking-widest font-mono mb-4">
-              <time dateTime={entry.date}>
-                {new Date(entry.date).toLocaleDateString('en-US', { 
+              <time dateTime={entry.published_date || entry.created_at}>
+                {new Date(entry.published_date || entry.created_at).toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
@@ -177,7 +86,7 @@ const JournalDetail = () => {
           </header>
 
           <div className="prose prose-lg max-w-none">
-            {entry.content.split('\n').map((paragraph, index) => {
+            {entry.content?.split('\n').map((paragraph, index) => {
               if (paragraph.trim().startsWith('##')) {
                 return (
                   <h2 key={index} className="text-3xl font-serif font-bold mt-12 mb-4">
