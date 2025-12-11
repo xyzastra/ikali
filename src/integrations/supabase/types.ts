@@ -342,6 +342,21 @@ export type Database = {
         }
         Relationships: []
       }
+      "public.users": {
+        Row: {
+          created_at: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+        }
+        Relationships: []
+      }
       thread_members: {
         Row: {
           id: string
@@ -503,18 +518,21 @@ export type Database = {
           created_at: string
           email: string | null
           id: number
+          tenant_id: string
         }
         Insert: {
           auth_id?: string | null
           created_at?: string
           email?: string | null
           id?: number
+          tenant_id: string
         }
         Update: {
           auth_id?: string | null
           created_at?: string
           email?: string | null
           id?: number
+          tenant_id?: string
         }
         Relationships: []
       }
