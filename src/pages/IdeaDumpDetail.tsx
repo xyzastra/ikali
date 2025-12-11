@@ -34,14 +34,20 @@ const IdeaDumpDetail = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <main className="container mx-auto px-8 py-24 max-w-4xl text-center">
-          <h1 className="text-4xl font-serif font-bold mb-4">Idea Not Found</h1>
-          <p className="text-muted-foreground mb-8">The idea you're looking for doesn't exist.</p>
-          <Link to="/idea-dumps">
-            <Button variant="outline">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Idea Dumps
-            </Button>
-          </Link>
+          <div className="rounded-xl border border-border bg-card p-8">
+            <h1 className="text-4xl font-serif font-bold mb-4">Idea Not Found</h1>
+            <p className="text-muted-foreground mb-4">The idea you're looking for doesn't exist or may have been moved.</p>
+            <p className="text-sm text-muted-foreground mb-6">
+              <span className="font-mono bg-muted px-2 py-1 rounded">Tip:</span> Idea URLs use UUIDs like{" "}
+              <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">/idea-dumps/a1b2c3d4-e5f6-7890-abcd-ef1234567890</span>
+            </p>
+            <Link to="/idea-dumps">
+              <Button variant="outline">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Idea Dumps
+              </Button>
+            </Link>
+          </div>
         </main>
       </div>
     );

@@ -35,14 +35,20 @@ const ProjectDetail = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <main className="container mx-auto px-8 py-24 max-w-4xl text-center">
-          <h1 className="text-4xl font-serif font-bold mb-4">Project Not Found</h1>
-          <p className="text-muted-foreground mb-8">The project you're looking for doesn't exist.</p>
-          <Link to="/projects">
-            <Button variant="outline">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Projects
-            </Button>
-          </Link>
+          <div className="rounded-xl border border-border bg-card p-8">
+            <h1 className="text-4xl font-serif font-bold mb-4">Project Not Found</h1>
+            <p className="text-muted-foreground mb-4">The project you're looking for doesn't exist or may have been moved.</p>
+            <p className="text-sm text-muted-foreground mb-6">
+              <span className="font-mono bg-muted px-2 py-1 rounded">Tip:</span> Project URLs use UUIDs like{" "}
+              <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">/projects/e81b8f07-ba0e-4ea3-bf8b-42c5df439a5b</span>
+            </p>
+            <Link to="/projects">
+              <Button variant="outline">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Projects
+              </Button>
+            </Link>
+          </div>
         </main>
       </div>
     );
