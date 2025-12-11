@@ -15,6 +15,7 @@ import JournalDetail from "./pages/JournalDetail";
 import Resume from "./pages/Resume";
 import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import Community from "./pages/Community";
@@ -51,6 +52,7 @@ const App = () => {
                 <Route path="/community/:id" element={<CommunityProjectDetail />} />
                 <Route path="/profile/:userId" element={<UserProfile />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route
                   path="/admin"
                   element={
