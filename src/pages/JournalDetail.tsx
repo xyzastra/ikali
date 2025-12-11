@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Header } from "@/components/Header";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
@@ -63,8 +64,12 @@ const JournalDetail = () => {
           Back to Journal
         </Link>
 
-        <article>
-          <header className="mb-12 pb-8 border-b border-border">
+        <motion.article
+          layoutId={`journal-card-${id}`}
+          className="bg-card rounded-xl border border-border overflow-hidden"
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <header className="p-8 md:p-12 pb-8 border-b border-border">
             <div className="text-sm text-muted-foreground uppercase tracking-widest font-mono mb-4">
               <time dateTime={entry.published_date || entry.created_at}>
                 {new Date(entry.published_date || entry.created_at).toLocaleDateString('en-US', { 
@@ -74,24 +79,38 @@ const JournalDetail = () => {
                 })}
               </time>
             </div>
-            <h1 className="text-5xl md:text-6xl font-serif font-bold mb-6 tracking-tight">
+            <motion.h1 
+              layoutId={`journal-title-${id}`}
+              className="text-4xl md:text-5xl font-serif font-bold mb-6 tracking-tight"
+            >
               {entry.title}
-            </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed mb-6">
+            </motion.h1>
+            <motion.p 
+              layoutId={`journal-desc-${id}`}
+              className="text-xl text-muted-foreground leading-relaxed mb-6"
+            >
               {entry.description}
-            </p>
+            </motion.p>
             {entry.tags && entry.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
+              <motion.div 
+                layoutId={`journal-tags-${id}`}
+                className="flex flex-wrap gap-2"
+              >
                 {entry.tags.map((tag) => (
                   <Badge key={tag} variant="outline" className="font-mono uppercase tracking-wider">
                     {tag}
                   </Badge>
                 ))}
-              </div>
+              </motion.div>
             )}
           </header>
 
-          <div className="prose prose-lg max-w-none">
+          <motion.div 
+            className="p-8 md:p-12 prose prose-lg max-w-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
+          >
             {entry.content?.split('\n').map((paragraph, index) => {
               if (paragraph.trim().startsWith('##')) {
                 return (
@@ -116,8 +135,8 @@ const JournalDetail = () => {
               }
               return null;
             })}
-          </div>
-        </article>
+          </motion.div>
+        </motion.article>
       </main>
     </div>
   );
