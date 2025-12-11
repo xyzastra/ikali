@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Home, Brain, Lightbulb, BookOpen, Briefcase, Mail, User, Settings } from "lucide-react";
+import { Menu, Home, Brain, Lightbulb, BookOpen, Briefcase, Mail, User, Settings, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
@@ -17,6 +17,10 @@ const navigation: {
   name: "Projects",
   path: "/projects",
   icon: Brain
+}, {
+  name: "Community",
+  path: "/community",
+  icon: Users
 }, {
   name: "Idea Dumps",
   path: "/idea-dumps",

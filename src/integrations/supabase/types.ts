@@ -221,6 +221,51 @@ export type Database = {
         }
         Relationships: []
       }
+      project_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          parent_id: string | null
+          project_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          parent_id?: string | null
+          project_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          parent_id?: string | null
+          project_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "project_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_comments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "user_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_members: {
         Row: {
           id: string
@@ -249,6 +294,35 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_votes: {
+        Row: {
+          created_at: string
+          id: string
+          project_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          project_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          project_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_votes_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "user_projects"
             referencedColumns: ["id"]
           },
         ]
@@ -350,6 +424,54 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_projects: {
+        Row: {
+          content: string | null
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_featured: boolean | null
+          looking_for_collaborators: boolean | null
+          project_type: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          upvote_count: number | null
+          user_id: string
+        }
+        Insert: {
+          content?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_featured?: boolean | null
+          looking_for_collaborators?: boolean | null
+          project_type?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          upvote_count?: number | null
+          user_id: string
+        }
+        Update: {
+          content?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_featured?: boolean | null
+          looking_for_collaborators?: boolean | null
+          project_type?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          upvote_count?: number | null
           user_id?: string
         }
         Relationships: []
