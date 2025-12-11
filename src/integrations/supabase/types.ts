@@ -243,6 +243,97 @@ export type Database = {
           },
         ]
       }
+      nods_page: {
+        Row: {
+          checksum: string | null
+          id: number
+          meta: Json | null
+          parent_page_id: number | null
+          path: string
+          source: string | null
+          type: string | null
+        }
+        Insert: {
+          checksum?: string | null
+          id?: number
+          meta?: Json | null
+          parent_page_id?: number | null
+          path: string
+          source?: string | null
+          type?: string | null
+        }
+        Update: {
+          checksum?: string | null
+          id?: number
+          meta?: Json | null
+          parent_page_id?: number | null
+          path?: string
+          source?: string | null
+          type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nods_page_parent_page_id_fkey"
+            columns: ["parent_page_id"]
+            isOneToOne: false
+            referencedRelation: "nods_page"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nods_page_section: {
+        Row: {
+          content: string | null
+          embedding: string | null
+          heading: string | null
+          id: number
+          page_id: number
+          slug: string | null
+          token_count: number | null
+        }
+        Insert: {
+          content?: string | null
+          embedding?: string | null
+          heading?: string | null
+          id?: number
+          page_id: number
+          slug?: string | null
+          token_count?: number | null
+        }
+        Update: {
+          content?: string | null
+          embedding?: string | null
+          heading?: string | null
+          id?: number
+          page_id?: number
+          slug?: string | null
+          token_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nods_page_section_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "nods_page"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      password_failed_verification_attempts: {
+        Row: {
+          last_failed_at: string
+          user_id: string
+        }
+        Insert: {
+          last_failed_at?: string
+          user_id: string
+        }
+        Update: {
+          last_failed_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -628,6 +719,16 @@ export type Database = {
       }
     }
     Functions: {
+      custom_access_token_hook: { Args: { event: Json }; Returns: Json }
+      get_page_parents: {
+        Args: { page_id: number }
+        Returns: {
+          id: number
+          meta: Json
+          parent_page_id: number
+          path: string
+        }[]
+      }
       get_public_profile: {
         Args: { profile_id: string }
         Returns: {
@@ -647,9 +748,29 @@ export type Database = {
         }
         Returns: boolean
       }
+      hook_password_verification_attempt: {
+        Args: { event: Json }
+        Returns: Json
+      }
       is_thread_member:
         | { Args: { p_thread_id: string; p_user_id: string }; Returns: boolean }
         | { Args: { thread_id_input: number }; Returns: boolean }
+      match_page_sections: {
+        Args: {
+          embedding: string
+          match_count: number
+          match_threshold: number
+          min_content_length: number
+        }
+        Returns: {
+          content: string
+          heading: string
+          id: number
+          page_id: number
+          similarity: number
+          slug: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

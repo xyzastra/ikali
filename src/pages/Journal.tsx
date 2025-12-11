@@ -4,8 +4,26 @@ import { useJournalEntries } from "@/hooks/useJournalEntries";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { Clock, BookOpen, ArrowRight } from "lucide-react";
+import { Clock, BookOpen, ArrowRight, TrendingUp, FileText, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
+
+// Helper to detect entry type based on title/tags
+const getEntryType = (entry: { title: string; tags?: string[] | null }): { 
+  type: "Strategy" | "Policy" | "Reflection"; 
+  color: string;
+  icon: React.ElementType;
+} => {
+  const title = entry.title.toLowerCase();
+  const tags = entry.tags?.map(t => t.toLowerCase()) || [];
+  
+  if (title.includes("strategy") || tags.includes("strategy")) {
+    return { type: "Strategy", color: "bg-chart-1", icon: TrendingUp };
+  }
+  if (title.includes("policy") || tags.includes("policy")) {
+    return { type: "Policy", color: "bg-chart-2", icon: FileText };
+  }
+  return { type: "Reflection", color: "bg-chart-4", icon: MessageSquare };
+};
 
 const Journal = () => {
   const { data: journalEntries, isLoading, error } = useJournalEntries();
@@ -31,6 +49,23 @@ const Journal = () => {
           title="Journal"
           description="Reflections on strategy, policy advocacy, and decentralized solutions."
         />
+
+        {/* Type Legend */}
+        <div className="flex flex-wrap items-center gap-4 mb-8 text-sm">
+          <span className="text-muted-foreground">Entry types:</span>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-chart-1" />
+            <span>Strategy</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-chart-2" />
+            <span>Policy</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-chart-4" />
+            <span>Reflection</span>
+          </div>
+        </div>
 
         {isLoading && <TimelineSkeleton />}
 
@@ -80,16 +115,28 @@ const Journal = () => {
                         <div className="absolute inset-0 bg-gradient-to-r from-primary/3 via-transparent to-accent/3 opacity-0 group-hover:opacity-100 transition-opacity" />
                         
                         <div className="relative space-y-3">
-                          {/* Date & Reading Time Row */}
+                          {/* Date, Type & Reading Time Row */}
                           <div className="flex items-center justify-between text-xs text-muted-foreground">
-                            <time className="font-mono">
-                              {entry.published_date 
-                                ? format(new Date(entry.published_date), "MMM d")
-                                : "—"}
-                            </time>
+                            <div className="flex items-center gap-2">
+                              <time className="font-mono">
+                                {entry.published_date 
+                                  ? format(new Date(entry.published_date), "MMM d")
+                                  : "—"}
+                              </time>
+                              {(() => {
+                                const { type, color, icon: TypeIcon } = getEntryType(entry);
+                                return (
+                                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted/50">
+                                    <div className={`w-2 h-2 rounded-full ${color}`} />
+                                    <TypeIcon className="w-3 h-3" />
+                                    <span className="text-[10px] uppercase tracking-wide">{type}</span>
+                                  </span>
+                                );
+                              })()}
+                            </div>
                             <span className="flex items-center gap-1.5 bg-muted/50 px-2 py-0.5 rounded-full">
                               <Clock className="w-3 h-3" />
-                              {entry.reading_time || 5} min read
+                              {entry.reading_time || 5} min
                             </span>
                           </div>
 
