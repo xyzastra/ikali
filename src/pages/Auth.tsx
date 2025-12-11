@@ -1,4 +1,4 @@
-import { useState, useEffect, useActionState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { z } from 'zod';
 import { useAuth } from '@/hooks/useAuth';
@@ -13,40 +13,40 @@ const authSchema = z.object({
   password: z.string().min(6, { message: 'Password must be at least 6 characters' }).max(72)
 });
 
-type FormState = {
-  success: boolean;
-  errors: {
-    email?: string;
-    password?: string;
-    confirmPassword?: string;
-  };
-  message?: string;
-  action?: 'login' | 'signup';
-};
-
-const initialState: FormState = {
-  success: false,
-  errors: {},
+type FormErrors = {
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
 };
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isPending, setIsPending] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
   const { signIn, signUp, user, isLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
 
-  const authAction = async (
-    _prevState: FormState,
-    formData: FormData
-  ): Promise<FormState> => {
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user && !isLoading) {
+      navigate(from, { replace: true });
+    }
+  }, [user, isLoading, navigate, from]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsPending(true);
+    setErrors({});
+
+    const formData = new FormData(e.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const confirmPassword = formData.get('confirmPassword') as string;
-    const isLoginMode = formData.get('isLogin') === 'true';
 
     // Validation
-    const newErrors: FormState['errors'] = {};
+    const newErrors: FormErrors = {};
     try {
       authSchema.parse({ email, password });
     } catch (err) {
@@ -58,68 +58,46 @@ const Auth = () => {
       }
     }
 
-    if (!isLoginMode && password !== confirmPassword) {
+    if (!isLogin && password !== confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
 
     if (Object.keys(newErrors).length > 0) {
-      return { success: false, errors: newErrors };
+      setErrors(newErrors);
+      setIsPending(false);
+      return;
     }
 
     try {
-      if (isLoginMode) {
+      if (isLogin) {
         const { error } = await signIn(email, password);
         if (error) {
           const message = error.message.includes('Invalid login credentials')
             ? 'Invalid email or password. Please try again.'
             : error.message;
-          return { success: false, errors: {}, message, action: 'login' };
+          toast({ title: 'Login Failed', description: message, variant: 'destructive' });
+        } else {
+          toast({ title: 'Welcome back!', description: 'You have successfully logged in.' });
+          navigate(from, { replace: true });
         }
-        return { success: true, errors: {}, message: 'Welcome back!', action: 'login' };
       } else {
         const { error } = await signUp(email, password);
         if (error) {
           const message = error.message.includes('User already registered')
             ? 'An account with this email already exists. Please log in instead.'
             : error.message;
-          return { success: false, errors: {}, message, action: 'signup' };
+          toast({ title: 'Sign Up Failed', description: message, variant: 'destructive' });
+        } else {
+          toast({ title: 'Account Created!', description: 'Please check your email to confirm your account.' });
+          setIsLogin(true);
         }
-        return { success: true, errors: {}, message: 'Please check your email to confirm your account.', action: 'signup' };
       }
     } catch {
-      return { success: false, errors: {}, message: 'An unexpected error occurred. Please try again.' };
+      toast({ title: 'Error', description: 'An unexpected error occurred. Please try again.', variant: 'destructive' });
+    } finally {
+      setIsPending(false);
     }
   };
-
-  const [state, formAction, isPending] = useActionState(authAction, initialState);
-
-  // Redirect if already logged in
-  useEffect(() => {
-    if (user && !isLoading) {
-      navigate(from, { replace: true });
-    }
-  }, [user, isLoading, navigate, from]);
-
-  // Handle success/error toasts and navigation
-  useEffect(() => {
-    if (state.success) {
-      toast({
-        title: state.action === 'login' ? 'Welcome back!' : 'Account Created!',
-        description: state.message,
-      });
-      if (state.action === 'login') {
-        navigate(from, { replace: true });
-      } else {
-        setIsLogin(true);
-      }
-    } else if (state.message) {
-      toast({
-        title: state.action === 'login' ? 'Login Failed' : 'Sign Up Failed',
-        description: state.message,
-        variant: 'destructive',
-      });
-    }
-  }, [state, navigate, from]);
 
   if (isLoading) {
     return (
@@ -144,9 +122,7 @@ const Auth = () => {
             </p>
           </div>
 
-          <form action={formAction} className="space-y-4">
-            <input type="hidden" name="isLogin" value={String(isLogin)} />
-            
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -156,9 +132,9 @@ const Auth = () => {
                 placeholder="you@example.com"
                 disabled={isPending}
                 autoComplete="email"
-                className={state.errors.email ? 'border-destructive' : ''}
+                className={errors.email ? 'border-destructive' : ''}
               />
-              {state.errors.email && <p className="text-xs text-destructive">{state.errors.email}</p>}
+              {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
             </div>
 
             <div className="space-y-2">
@@ -170,9 +146,9 @@ const Auth = () => {
                 placeholder="••••••••"
                 disabled={isPending}
                 autoComplete={isLogin ? 'current-password' : 'new-password'}
-                className={state.errors.password ? 'border-destructive' : ''}
+                className={errors.password ? 'border-destructive' : ''}
               />
-              {state.errors.password && <p className="text-xs text-destructive">{state.errors.password}</p>}
+              {errors.password && <p className="text-xs text-destructive">{errors.password}</p>}
             </div>
 
             {!isLogin && (
@@ -185,9 +161,9 @@ const Auth = () => {
                   placeholder="••••••••"
                   disabled={isPending}
                   autoComplete="new-password"
-                  className={state.errors.confirmPassword ? 'border-destructive' : ''}
+                  className={errors.confirmPassword ? 'border-destructive' : ''}
                 />
-                {state.errors.confirmPassword && <p className="text-xs text-destructive">{state.errors.confirmPassword}</p>}
+                {errors.confirmPassword && <p className="text-xs text-destructive">{errors.confirmPassword}</p>}
               </div>
             )}
 
@@ -199,9 +175,7 @@ const Auth = () => {
           <div className="text-center">
             <button
               type="button"
-              onClick={() => {
-                setIsLogin(!isLogin);
-              }}
+              onClick={() => setIsLogin(!isLogin)}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
