@@ -24,7 +24,7 @@ const navigation: {
 export const Header = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, isCollaborator, signOut } = useAuth();
 
   const NavLink = ({
     name,
@@ -125,6 +125,37 @@ export const Header = () => {
               {isAdmin && <NavLink name="Admin" path="/admin" icon={Settings} mobile />}
               {!user && <NavLink name="Login" path="/auth" icon={User} mobile />}
             </div>
+            
+            {/* User info with role badge */}
+            {user && (
+              <div className="mt-6 pt-4 border-t border-border">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground truncate max-w-[150px]">
+                      {user.email}
+                    </span>
+                    {isAdmin && (
+                      <span className="inline-flex items-center rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-semibold text-emerald-400 border border-emerald-500/40">
+                        ADMIN
+                      </span>
+                    )}
+                    {isCollaborator && !isAdmin && (
+                      <span className="inline-flex items-center rounded-full bg-sky-500/20 px-2 py-0.5 text-[9px] font-semibold text-sky-400 border border-sky-500/40">
+                        COLLAB
+                      </span>
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => signOut()}
+                    className="text-[10px] text-muted-foreground hover:text-foreground"
+                  >
+                    Sign out
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -145,6 +176,31 @@ export const Header = () => {
             ))}
             {isAdmin && <NavLink name="Admin" path="/admin" icon={Settings} />}
             {!user && <NavLink name="Login" path="/auth" icon={User} />}
+            
+            {/* User role badge */}
+            {user && (
+              <div className="ml-2 flex items-center gap-2">
+                {isAdmin && (
+                  <span className="inline-flex items-center rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-semibold text-emerald-400 border border-emerald-500/40">
+                    ADMIN
+                  </span>
+                )}
+                {isCollaborator && !isAdmin && (
+                  <span className="inline-flex items-center rounded-full bg-sky-500/20 px-2 py-0.5 text-[9px] font-semibold text-sky-400 border border-sky-500/40">
+                    COLLAB
+                  </span>
+                )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => signOut()}
+                  className="text-[9px] px-2 py-1 h-auto text-muted-foreground hover:text-foreground"
+                >
+                  Sign out
+                </Button>
+              </div>
+            )}
+            
             <ThemeToggle className="ml-2" />
           </div>
         </nav>
