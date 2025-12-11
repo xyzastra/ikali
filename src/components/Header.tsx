@@ -109,7 +109,7 @@ export const Header = () => {
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-4 border-b border-border">
-            <span className="font-serif font-bold text-foreground uppercase text-sm tracking-tight">brainOS</span>
+            <span className="logo-3d font-serif font-bold text-primary uppercase text-xs tracking-tight">brainOS</span>
             <div className="flex items-center gap-2">
               <ThemeToggle />
               <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
@@ -134,7 +134,7 @@ export const Header = () => {
         <nav className="container mx-auto h-12 flex items-center justify-between max-w-7xl px-4">
           <Link
             to="/"
-            className="font-serif font-bold text-foreground hover:opacity-60 transition-all duration-300 tracking-tight uppercase text-xs hover:translate-y-[-1px]"
+            className="logo-3d font-serif font-bold text-primary hover:opacity-80 transition-all duration-300 tracking-tight uppercase text-[10px] hover:translate-y-[-1px]"
           >
             brainOS
           </Link>
