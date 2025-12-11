@@ -45,6 +45,11 @@ const Index = () => {
       path: "/projects",
     },
     {
+      title: "Community",
+      description: "Share and discover user projects.",
+      path: "/community",
+    },
+    {
       title: "Ideas",
       description: "Raw concepts and policy frameworks.",
       path: "/idea-dumps",
