@@ -125,69 +125,90 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          importance: number | null
           published_date: string | null
           reading_time: number | null
+          size_variant: string | null
           tags: string[] | null
           title: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           content?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          importance?: number | null
           published_date?: string | null
           reading_time?: number | null
+          size_variant?: string | null
           tags?: string[] | null
           title: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           content?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          importance?: number | null
           published_date?: string | null
           reading_time?: number | null
+          size_variant?: string | null
           tags?: string[] | null
           title?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
       journal_entries: {
         Row: {
           content: string | null
+          cover_style: string | null
           created_at: string
           description: string | null
           id: string
+          journal_style: string | null
+          mood: string | null
           published_date: string | null
           reading_time: number | null
           tags: string[] | null
           title: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           content?: string | null
+          cover_style?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          journal_style?: string | null
+          mood?: string | null
           published_date?: string | null
           reading_time?: number | null
           tags?: string[] | null
           title: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           content?: string | null
+          cover_style?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          journal_style?: string | null
+          mood?: string | null
           published_date?: string | null
           reading_time?: number | null
           tags?: string[] | null
           title?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -473,16 +494,31 @@ export type Database = {
       }
       projects: {
         Row: {
+          description: string | null
           members: number
+          owner_id: string | null
           "project type": string | null
+          style: Json | null
+          thumbnail_url: string | null
+          title: string | null
         }
         Insert: {
+          description?: string | null
           members?: number
+          owner_id?: string | null
           "project type"?: string | null
+          style?: Json | null
+          thumbnail_url?: string | null
+          title?: string | null
         }
         Update: {
+          description?: string | null
           members?: number
+          owner_id?: string | null
           "project type"?: string | null
+          style?: Json | null
+          thumbnail_url?: string | null
+          title?: string | null
         }
         Relationships: []
       }
@@ -603,15 +639,36 @@ export type Database = {
       }
       user_profiles: {
         Row: {
+          accent_color: string | null
+          avatar_url: string | null
           created_at: string | null
+          display_name: string | null
+          font_pref: string | null
+          idea_layout_style: string | null
+          journal_style: string | null
+          primary_color: string | null
           user_id: string
         }
         Insert: {
+          accent_color?: string | null
+          avatar_url?: string | null
           created_at?: string | null
+          display_name?: string | null
+          font_pref?: string | null
+          idea_layout_style?: string | null
+          journal_style?: string | null
+          primary_color?: string | null
           user_id: string
         }
         Update: {
+          accent_color?: string | null
+          avatar_url?: string | null
           created_at?: string | null
+          display_name?: string | null
+          font_pref?: string | null
+          idea_layout_style?: string | null
+          journal_style?: string | null
+          primary_color?: string | null
           user_id?: string
         }
         Relationships: []
