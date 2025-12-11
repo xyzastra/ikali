@@ -22,6 +22,8 @@ export type Database = {
           ip_address: string | null
           message: string
           name: string
+          tenant_id: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -30,6 +32,8 @@ export type Database = {
           ip_address?: string | null
           message: string
           name: string
+          tenant_id?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -38,6 +42,8 @@ export type Database = {
           ip_address?: string | null
           message?: string
           name?: string
+          tenant_id?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
