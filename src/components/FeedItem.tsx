@@ -41,10 +41,7 @@ export const FeedItem = ({
             </time>
             {readingTime && <>
                 <span className="text-border">•</span>
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
-                  {readingTime} min read
-                </span>
+                
               </>}
           </div>
 
