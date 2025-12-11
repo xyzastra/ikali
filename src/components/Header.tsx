@@ -57,13 +57,13 @@ export const Header = () => {
           px-3 py-2 text-sm font-medium transition-opacity uppercase tracking-wide flex items-center gap-2
           ${isActive ? "text-foreground border-b-2 border-foreground" : "text-muted-foreground hover:text-foreground hover:opacity-70"}
         `}>
-        <Icon className="h-4 w-4" />
+        <Icon className="h-[10px] w-[10px]" />
         {name}
       </Link>;
   };
   return <header className="sticky top-0 z-50 w-full border-b border-border bg-header">
       <nav className="container mx-auto px-8 h-20 flex items-center justify-between max-w-7xl">
-        <Link to="/" className="font-serif font-bold text-2xl text-foreground hover:opacity-60 transition-opacity tracking-tight uppercase">
+        <Link to="/" className="font-serif font-bold text-foreground hover:opacity-60 transition-opacity tracking-tight uppercase text-sm">
           brainOS
         </Link>
 
