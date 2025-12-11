@@ -9,6 +9,7 @@ interface FeedItemProps {
   tags?: string[];
   coverImage?: string;
   readingTime?: number;
+  className?: string;
 }
 export const FeedItem = ({
   title,
@@ -17,14 +18,15 @@ export const FeedItem = ({
   path,
   tags,
   coverImage,
-  readingTime
+  readingTime,
+  className
 }: FeedItemProps) => {
   const formattedDate = new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric'
   });
-  return <article className="feed-item group relative rounded-lg border border-border bg-card p-4 sm:p-6 hover:border-primary/30 hover:shadow-lg transition-all duration-300">
+  return <article className={`feed-item group relative rounded-lg border border-border bg-card p-4 sm:p-6 hover:border-primary/30 hover:shadow-lg transition-all duration-300 ${className || ""}`}>
       <Link to={path} aria-label={`Read more about ${title}`} className="absolute inset-0 z-10 text-xs" />
       
       <div className="flex flex-col gap-3 sm:gap-4">

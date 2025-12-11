@@ -16,6 +16,12 @@ export interface UserProject {
   upvote_count: number;
   created_at: string;
   updated_at: string;
+  profiles?: {
+    id: string;
+    display_name: string | null;
+    avatar_url: string | null;
+    email: string | null;
+  } | null;
 }
 
 export interface ProjectComment {
@@ -54,9 +60,22 @@ export function useUserProjects(options?: { featured?: boolean; type?: string })
         query = query.eq("project_type", options.type);
       }
 
-      const { data, error } = await query;
+      const { data: projects, error } = await query;
       if (error) throw error;
-      return data as UserProject[];
+
+      // Fetch profiles for all unique user_ids
+      const userIds = [...new Set((projects || []).map(p => p.user_id))];
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, display_name, avatar_url, email")
+        .in("id", userIds);
+
+      const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+
+      return (projects || []).map(project => ({
+        ...project,
+        profiles: profileMap.get(project.user_id) || null,
+      })) as UserProject[];
     },
   });
 }
@@ -65,13 +84,25 @@ export function useUserProject(id: string) {
   return useQuery({
     queryKey: ["user-project", id],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: project, error } = await supabase
         .from("user_projects")
         .select("*")
         .eq("id", id)
         .maybeSingle();
       if (error) throw error;
-      return data as UserProject | null;
+      if (!project) return null;
+
+      // Fetch profile for the user
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("id, display_name, avatar_url, email")
+        .eq("id", project.user_id)
+        .maybeSingle();
+
+      return {
+        ...project,
+        profiles: profile || null,
+      } as UserProject;
     },
     enabled: !!id,
   });
