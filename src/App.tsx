@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import Community from "./pages/Community";
 import CommunityProjectDetail from "./pages/CommunityProjectDetail";
 import SubmitProject from "./pages/SubmitProject";
+import UserProfile from "./pages/UserProfile";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => {
                 <Route path="/community" element={<Community />} />
                 <Route path="/community/submit" element={<SubmitProject />} />
                 <Route path="/community/:id" element={<CommunityProjectDetail />} />
+                <Route path="/profile/:userId" element={<UserProfile />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route
                   path="/admin"

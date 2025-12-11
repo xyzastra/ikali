@@ -5,6 +5,7 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus, ArrowUp, Users, Star, Sparkles } from "lucide-react";
 import { useUserProjects } from "@/hooks/useUserProjects";
 import { useAuth } from "@/hooks/useAuth";
@@ -99,6 +100,13 @@ interface ProjectCardProps {
     is_featured: boolean;
     created_at: string;
     cover_image_url: string | null;
+    user_id: string;
+    profiles?: {
+      id: string;
+      display_name: string | null;
+      avatar_url: string | null;
+      email: string | null;
+    } | null;
   };
   featured?: boolean;
 }
@@ -106,6 +114,9 @@ const ProjectCard = ({
   project,
   featured
 }: ProjectCardProps) => {
+  const displayName = project.profiles?.display_name || project.profiles?.email?.split("@")[0] || "Anonymous";
+  const initials = displayName.slice(0, 2).toUpperCase();
+
   return <Link to={`/community/${project.id}`} className={`group block border border-border rounded-lg overflow-hidden bg-card hover:border-primary/50 transition-all hover:shadow-md ${featured ? "md:flex" : ""}`}>
       {project.cover_image_url && <div className={`bg-muted ${featured ? "md:w-1/3" : "h-32"}`}>
           <img src={project.cover_image_url} alt={project.title} className="w-full h-full object-cover" />
@@ -125,7 +136,7 @@ const ProjectCard = ({
             {project.description}
           </p>}
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 mb-3">
           <Badge variant={project.project_type === "collaborative" ? "default" : "secondary"} className="text-xs">
             {project.project_type === "collaborative" ? <><Users className="h-3 w-3 mr-1" /> Collab</> : "Personal"}
           </Badge>
@@ -137,11 +148,23 @@ const ProjectCard = ({
             </Badge>}
         </div>
 
-        <p className="text-xs text-muted-foreground mt-3">
-          {formatDistanceToNow(new Date(project.created_at), {
-          addSuffix: true
-        })}
-        </p>
+        {/* Author info */}
+        <div className="flex items-center justify-between">
+          <Link 
+            to={`/profile/${project.user_id}`} 
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors z-10 relative"
+          >
+            <Avatar className="h-5 w-5">
+              <AvatarImage src={project.profiles?.avatar_url || undefined} />
+              <AvatarFallback className="text-[10px] bg-primary/10">{initials}</AvatarFallback>
+            </Avatar>
+            <span>{displayName}</span>
+          </Link>
+          <span className="text-xs text-muted-foreground">
+            {formatDistanceToNow(new Date(project.created_at), { addSuffix: true })}
+          </span>
+        </div>
       </div>
     </Link>;
 };

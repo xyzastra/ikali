@@ -4,7 +4,8 @@ import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowUp, ArrowLeft, Users, Star, Trash2, MessageSquare, Reply } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ArrowUp, ArrowLeft, Users, Star, Trash2, MessageSquare, Reply, User } from "lucide-react";
 import { useUserProject, useProjectComments, useUserVote, useProjectMutations, ProjectComment } from "@/hooks/useUserProjects";
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
@@ -77,6 +78,8 @@ const CommunityProjectDetail = () => {
 
   const isOwner = user?.id === project.user_id;
   const canDelete = isOwner || isAdmin;
+  const displayName = project.profiles?.display_name || project.profiles?.email?.split("@")[0] || "Anonymous";
+  const initials = displayName.slice(0, 2).toUpperCase();
 
   return (
     <div className="min-h-screen bg-background">
@@ -164,9 +167,20 @@ const CommunityProjectDetail = () => {
           </div>
         )}
 
-        <p className="text-sm text-muted-foreground mb-8">
-          Posted {formatDistanceToNow(new Date(project.created_at), { addSuffix: true })}
-        </p>
+        {/* Author and Date */}
+        <div className="flex items-center gap-4 mb-8">
+          <Link to={`/profile/${project.user_id}`} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={project.profiles?.avatar_url || undefined} />
+              <AvatarFallback className="bg-primary/10 text-primary">{initials}</AvatarFallback>
+            </Avatar>
+            <span className="font-medium">{displayName}</span>
+          </Link>
+          <span className="text-muted-foreground">•</span>
+          <span className="text-sm text-muted-foreground">
+            {formatDistanceToNow(new Date(project.created_at), { addSuffix: true })}
+          </span>
+        </div>
 
         {/* Comments Section */}
         <div className="border-t border-border pt-8">
