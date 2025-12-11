@@ -1,4 +1,5 @@
 import { Sprout, Leaf, TreeDeciduous } from "lucide-react";
+import { motion } from "framer-motion";
 import styles from "./IdeaCard.module.css";
 
 export type IdeaMaturity = "seedling" | "growing" | "evergreen";
@@ -18,6 +19,7 @@ interface IdeaCardProps {
   ownerAvatar?: string | null;
   onClick?: () => void;
   className?: string;
+  enableLayoutAnimation?: boolean;
 }
 
 const maturityConfig = {
@@ -69,6 +71,7 @@ export function getIdeaMaturity(
 }
 
 export function IdeaCard({
+  id,
   title,
   description,
   tags,
@@ -80,18 +83,23 @@ export function IdeaCard({
   ownerAvatar,
   onClick,
   className = "",
+  enableLayoutAnimation = true,
 }: IdeaCardProps) {
   const maturityInfo = maturityConfig[maturity];
   const sizeInfo = sizeConfig[sizeVariant];
   const MaturityIcon = maturityInfo.icon;
 
   return (
-    <article
+    <motion.article
+      layoutId={enableLayoutAnimation ? `idea-card-${id}` : undefined}
       className={`${styles.card} ${sizeInfo.className} ${className}`}
       style={{ borderRadius: sizeInfo.borderRadius }}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
     >
       {/* Gradient overlay */}
       <div
@@ -105,7 +113,12 @@ export function IdeaCard({
       <div className={styles.content}>
         {/* Header with title and maturity */}
         <div className={styles.header}>
-          <h3 className={styles.title}>{title}</h3>
+          <motion.h3 
+            layoutId={enableLayoutAnimation ? `idea-title-${id}` : undefined}
+            className={styles.title}
+          >
+            {title}
+          </motion.h3>
           <span className={`${styles.maturityBadge} ${maturityInfo.className}`}>
             <MaturityIcon className="w-3 h-3" />
             {maturityInfo.label}
@@ -113,11 +126,21 @@ export function IdeaCard({
         </div>
 
         {/* Description */}
-        {description && <p className={styles.description}>{description}</p>}
+        {description && (
+          <motion.p 
+            layoutId={enableLayoutAnimation ? `idea-desc-${id}` : undefined}
+            className={styles.description}
+          >
+            {description}
+          </motion.p>
+        )}
 
         {/* Tags */}
         {tags && tags.length > 0 && (
-          <div className={styles.tags}>
+          <motion.div 
+            layoutId={enableLayoutAnimation ? `idea-tags-${id}` : undefined}
+            className={styles.tags}
+          >
             {tags.slice(0, 4).map((tag) => (
               <span key={tag} className={styles.tag}>
                 {tag}
@@ -126,7 +149,7 @@ export function IdeaCard({
             {tags.length > 4 && (
               <span className={styles.tag}>+{tags.length - 4}</span>
             )}
-          </div>
+          </motion.div>
         )}
 
         {/* Footer with avatar and date */}
@@ -157,7 +180,7 @@ export function IdeaCard({
           )}
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
