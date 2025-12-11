@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useActionState } from "react";
 import { Header } from "@/components/Header";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useRef } from "react";
 
 // Client-side validation schema (mirrors server-side)
 const contactSchema = z.object({
@@ -30,33 +31,33 @@ const contactSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
+type FormState = {
+  success: boolean;
+  errors: Partial<Record<keyof ContactFormData, string>>;
+  message?: string;
+};
+
+const initialState: FormState = {
+  success: false,
+  errors: {},
+};
+
 const Contact = () => {
-  const [formData, setFormData] = useState<ContactFormData>({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
-    if (errors[name as keyof ContactFormData]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
+  const submitContactForm = async (
+    _prevState: FormState,
+    formData: FormData
+  ): Promise<FormState> => {
+    const rawData = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      message: formData.get("message") as string,
+    };
 
     // Client-side validation
-    const validationResult = contactSchema.safeParse(formData);
+    const validationResult = contactSchema.safeParse(rawData);
 
     if (!validationResult.success) {
       const fieldErrors: Partial<Record<keyof ContactFormData, string>> = {};
@@ -64,11 +65,8 @@ const Contact = () => {
         const field = err.path[0] as keyof ContactFormData;
         fieldErrors[field] = err.message;
       });
-      setErrors(fieldErrors);
-      return;
+      return { success: false, errors: fieldErrors };
     }
-
-    setIsSubmitting(true);
 
     try {
       const { data, error } = await supabase.functions.invoke("contact", {
@@ -76,7 +74,11 @@ const Contact = () => {
       });
 
       if (error) {
-        throw new Error(error.message || "Failed to submit form");
+        return {
+          success: false,
+          errors: {},
+          message: error.message || "Failed to submit form",
+        };
       }
 
       if (!data.success) {
@@ -86,29 +88,39 @@ const Contact = () => {
           data.details.forEach((err: { field: string; message: string }) => {
             fieldErrors[err.field as keyof ContactFormData] = err.message;
           });
-          setErrors(fieldErrors);
+          return { success: false, errors: fieldErrors, message: data.error };
         }
-        throw new Error(data.error || "Submission failed");
+        return { success: false, errors: {}, message: data.error || "Submission failed" };
       }
 
-      toast({
-        title: "Message sent!",
-        description: data.message,
-      });
-
-      // Reset form on success
-      setFormData({ name: "", email: "", message: "" });
-
+      return { success: true, errors: {}, message: data.message };
     } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to send message",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+      return {
+        success: false,
+        errors: {},
+        message: error instanceof Error ? error.message : "Failed to send message",
+      };
     }
   };
+
+  const [state, formAction, isPending] = useActionState(submitContactForm, initialState);
+
+  // Show toast and reset form on success/error
+  useEffect(() => {
+    if (state.success) {
+      toast({
+        title: "Message sent!",
+        description: state.message,
+      });
+      formRef.current?.reset();
+    } else if (state.message) {
+      toast({
+        title: "Error",
+        description: state.message,
+        variant: "destructive",
+      });
+    }
+  }, [state, toast]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -119,23 +131,22 @@ const Contact = () => {
           description="Have a question or want to collaborate? Send me a message."
         />
 
-        <form onSubmit={handleSubmit} className="space-y-6 mt-8">
+        <form ref={formRef} action={formAction} className="space-y-6 mt-8">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
               name="name"
               type="text"
-              value={formData.name}
-              onChange={handleChange}
               placeholder="Your name"
               maxLength={100}
-              aria-describedby={errors.name ? "name-error" : undefined}
-              className={errors.name ? "border-destructive" : ""}
+              aria-describedby={state.errors.name ? "name-error" : undefined}
+              className={state.errors.name ? "border-destructive" : ""}
+              disabled={isPending}
             />
-            {errors.name && (
+            {state.errors.name && (
               <p id="name-error" className="text-sm text-destructive">
-                {errors.name}
+                {state.errors.name}
               </p>
             )}
           </div>
@@ -146,16 +157,15 @@ const Contact = () => {
               id="email"
               name="email"
               type="email"
-              value={formData.email}
-              onChange={handleChange}
               placeholder="your@email.com"
               maxLength={255}
-              aria-describedby={errors.email ? "email-error" : undefined}
-              className={errors.email ? "border-destructive" : ""}
+              aria-describedby={state.errors.email ? "email-error" : undefined}
+              className={state.errors.email ? "border-destructive" : ""}
+              disabled={isPending}
             />
-            {errors.email && (
+            {state.errors.email && (
               <p id="email-error" className="text-sm text-destructive">
-                {errors.email}
+                {state.errors.email}
               </p>
             )}
           </div>
@@ -165,26 +175,22 @@ const Contact = () => {
             <Textarea
               id="message"
               name="message"
-              value={formData.message}
-              onChange={handleChange}
               placeholder="Your message..."
               rows={6}
               maxLength={5000}
-              aria-describedby={errors.message ? "message-error" : undefined}
-              className={errors.message ? "border-destructive" : ""}
+              aria-describedby={state.errors.message ? "message-error" : undefined}
+              className={state.errors.message ? "border-destructive" : ""}
+              disabled={isPending}
             />
-            <p className="text-xs text-muted-foreground text-right">
-              {formData.message.length}/5000
-            </p>
-            {errors.message && (
+            {state.errors.message && (
               <p id="message-error" className="text-sm text-destructive">
-                {errors.message}
+                {state.errors.message}
               </p>
             )}
           </div>
 
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Sending..." : "Send Message"}
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? "Sending..." : "Send Message"}
           </Button>
         </form>
       </main>
