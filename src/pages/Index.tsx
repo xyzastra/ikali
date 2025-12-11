@@ -85,7 +85,7 @@ const Index = () => {
                 <p className="text-xs leading-relaxed line-clamp-2 font-normal text-primary-foreground">
                   {section.description}
                 </p>
-                <span className="mt-2 text-[10px] uppercase tracking-wider transition-colors flex items-center gap-1 text-accent">
+                <span className="mt-2 text-[10px] uppercase tracking-wider transition-colors flex items-center gap-1 text-accent bg-primary">
                   View <span className="group-hover:translate-x-0.5 transition-transform">→</span>
                 </span>
               </Link>)}

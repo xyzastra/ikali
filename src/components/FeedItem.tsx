@@ -56,7 +56,7 @@ export const FeedItem = ({
           </p>
 
           {/* Tags */}
-          {tags && tags.length > 0 && <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
+          {tags && tags.length > 0 && <div className="flex flex-wrap gap-1.5 xsmall:gap-2 pt-1">
               {tags.map(tag => <Badge key={tag} variant="secondary" className="text-[10px] sm:text-xs px-2 py-0.5 pointer-events-none">
                   {tag}
                 </Badge>)}
