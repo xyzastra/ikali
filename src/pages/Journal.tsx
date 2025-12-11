@@ -1,15 +1,18 @@
+import { useState, useMemo } from "react";
 import { Header } from "@/components/Header";
 import { SectionHeader } from "@/components/SectionHeader";
 import { useJournalEntries } from "@/hooks/useJournalEntries";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { Clock, BookOpen, ArrowRight, TrendingUp, FileText, MessageSquare } from "lucide-react";
+import { Clock, BookOpen, ArrowRight, TrendingUp, FileText, MessageSquare, X } from "lucide-react";
 import { format } from "date-fns";
+
+type EntryType = "Strategy" | "Policy" | "Reflection";
 
 // Helper to detect entry type based on title/tags
 const getEntryType = (entry: { title: string; tags?: string[] | null }): { 
-  type: "Strategy" | "Policy" | "Reflection"; 
+  type: EntryType; 
   color: string;
   icon: React.ElementType;
 } => {
@@ -25,20 +28,40 @@ const getEntryType = (entry: { title: string; tags?: string[] | null }): {
   return { type: "Reflection", color: "bg-chart-4", icon: MessageSquare };
 };
 
+const typeConfig: Record<EntryType, { color: string; icon: React.ElementType }> = {
+  Strategy: { color: "bg-chart-1", icon: TrendingUp },
+  Policy: { color: "bg-chart-2", icon: FileText },
+  Reflection: { color: "bg-chart-4", icon: MessageSquare },
+};
+
 const Journal = () => {
   const { data: journalEntries, isLoading, error } = useJournalEntries();
+  const [activeFilter, setActiveFilter] = useState<EntryType | null>(null);
 
-  // Group entries by year
-  const entriesByYear = journalEntries?.reduce((acc, entry) => {
-    const year = entry.published_date 
-      ? new Date(entry.published_date).getFullYear().toString()
-      : "Undated";
-    if (!acc[year]) acc[year] = [];
-    acc[year].push(entry);
-    return acc;
-  }, {} as Record<string, typeof journalEntries>) || {};
+  // Filter entries based on active filter
+  const filteredEntries = useMemo(() => {
+    if (!journalEntries) return [];
+    if (!activeFilter) return journalEntries;
+    return journalEntries.filter(entry => getEntryType(entry).type === activeFilter);
+  }, [journalEntries, activeFilter]);
+
+  // Group filtered entries by year
+  const entriesByYear = useMemo(() => {
+    return filteredEntries.reduce((acc, entry) => {
+      const year = entry.published_date 
+        ? new Date(entry.published_date).getFullYear().toString()
+        : "Undated";
+      if (!acc[year]) acc[year] = [];
+      acc[year].push(entry);
+      return acc;
+    }, {} as Record<string, typeof filteredEntries>);
+  }, [filteredEntries]);
 
   const years = Object.keys(entriesByYear).sort((a, b) => b.localeCompare(a));
+
+  const handleFilterClick = (type: EntryType) => {
+    setActiveFilter(prev => prev === type ? null : type);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -50,22 +73,45 @@ const Journal = () => {
           description="Reflections on strategy, policy advocacy, and decentralized solutions."
         />
 
-        {/* Type Legend */}
-        <div className="flex flex-wrap items-center gap-4 mb-8 text-sm">
-          <span className="text-muted-foreground">Entry types:</span>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-chart-1" />
-            <span>Strategy</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-chart-2" />
-            <span>Policy</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-chart-4" />
-            <span>Reflection</span>
-          </div>
+        {/* Filter Buttons */}
+        <div className="flex flex-wrap items-center gap-2 mb-8">
+          <span className="text-sm text-muted-foreground mr-2">Filter by:</span>
+          {(Object.keys(typeConfig) as EntryType[]).map((type) => {
+            const { color, icon: Icon } = typeConfig[type];
+            const isActive = activeFilter === type;
+            return (
+              <button
+                key={type}
+                onClick={() => handleFilterClick(type)}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border ${
+                  isActive 
+                    ? "bg-primary text-primary-foreground border-primary shadow-md" 
+                    : "bg-card border-border hover:border-primary/50 hover:bg-muted"
+                }`}
+              >
+                <div className={`w-2.5 h-2.5 rounded-full ${color}`} />
+                <Icon className="w-3.5 h-3.5" />
+                <span>{type}</span>
+              </button>
+            );
+          })}
+          {activeFilter && (
+            <button
+              onClick={() => setActiveFilter(null)}
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            >
+              <X className="w-3 h-3" />
+              Clear
+            </button>
+          )}
         </div>
+
+        {/* Results count */}
+        {activeFilter && (
+          <p className="text-sm text-muted-foreground mb-6">
+            Showing {filteredEntries.length} {activeFilter.toLowerCase()} {filteredEntries.length === 1 ? 'entry' : 'entries'}
+          </p>
+        )}
 
         {isLoading && <TimelineSkeleton />}
 
@@ -75,7 +121,7 @@ const Journal = () => {
           </div>
         )}
 
-        {journalEntries && journalEntries.length > 0 && (
+        {filteredEntries.length > 0 && (
           <div className="relative">
             {/* Timeline Line - Hidden on mobile */}
             <div className="hidden md:block absolute left-[120px] top-0 bottom-0 w-px bg-gradient-to-b from-border via-primary/20 to-border" />
@@ -179,9 +225,22 @@ const Journal = () => {
           </div>
         )}
 
-        {journalEntries && journalEntries.length === 0 && (
+        {filteredEntries.length === 0 && !isLoading && !error && (
           <div className="text-center py-16">
-            <p className="text-muted-foreground text-lg">No journal entries yet. Start documenting your journey!</p>
+            <p className="text-muted-foreground text-lg">
+              {activeFilter 
+                ? `No ${activeFilter.toLowerCase()} entries found. Try a different filter.`
+                : "No journal entries yet. Start documenting your journey!"}
+            </p>
+            {activeFilter && (
+              <button
+                onClick={() => setActiveFilter(null)}
+                className="mt-4 inline-flex items-center gap-1 text-primary hover:underline"
+              >
+                <X className="w-4 h-4" />
+                Clear filter
+              </button>
+            )}
           </div>
         )}
       </main>
