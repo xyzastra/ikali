@@ -385,8 +385,8 @@ export type Database = {
         Returns: boolean
       }
       is_thread_member:
-        | { Args: { thread_id_input: number }; Returns: boolean }
         | { Args: { p_thread_id: string; p_user_id: string }; Returns: boolean }
+        | { Args: { thread_id_input: number }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
