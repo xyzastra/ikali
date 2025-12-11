@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { PageTransition } from "@/components/PageTransition";
+import { AIChatWidget } from "@/components/AIChatWidget";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -41,6 +42,7 @@ const App = () => {
               <a href="#main-content" className="skip-to-content">
                 Skip to main content
               </a>
+              <AIChatWidget />
               <main id="main-content">
                 <Routes>
                   <Route path="/" element={<PageTransition><Index /></PageTransition>} />
