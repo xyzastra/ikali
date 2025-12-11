@@ -66,7 +66,7 @@ const Index = () => {
         <Header />
 
         {/* Featured Content Carousel */}
-        <section className="container mx-auto px-8 py-16 max-w-6xl border-b border-border">
+        <section className="container mx-auto max-w-6xl border-b border-border py-[20px] px-[18px]">
           <h2 className="text-3xl font-serif font-bold mb-8">Featured</h2>
           <Carousel>
             {featuredProjects.map(item => <CarouselItem key={`${item.type}-${item.id}`}>
