@@ -30,13 +30,13 @@ export const FeedItem = ({
       <div className="flex flex-col gap-3 sm:gap-4">
         {/* Cover Image */}
         {coverImage && <div className="relative w-full aspect-[16/10] sm:aspect-[10/8] rounded-md overflow-hidden bg-muted">
-            <img src={coverImage} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            
           </div>}
         
         <div className="flex-1 space-y-3">
           {/* Meta info - stacked on mobile, row on larger */}
           <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-            <time dateTime={date} className="font-medium">
+            <time dateTime={date} className="font-xsmall">
               {formattedDate}
             </time>
             {readingTime && <>
