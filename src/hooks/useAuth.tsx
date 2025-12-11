@@ -7,6 +7,8 @@ interface AuthContextType {
   session: Session | null;
   isLoading: boolean;
   isAdmin: boolean;
+  isCollaborator: boolean;
+  canEditContent: boolean; // true if admin OR collaborator
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -21,26 +23,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isCollaborator, setIsCollaborator] = useState(false);
 
-  const checkAdminRole = async (userId: string) => {
+  const checkUserRoles = async (userId: string) => {
     try {
       const { data, error } = await supabase
         .from('user_roles')
         .select('role')
-        .eq('user_id', userId)
-        .eq('role', 'admin')
-        .maybeSingle();
+        .eq('user_id', userId);
       
       if (error) {
-        console.error('Error checking admin role:', error);
+        console.error('Error checking user roles:', error);
         setIsAdmin(false);
+        setIsCollaborator(false);
         return;
       }
       
-      setIsAdmin(!!data);
+      const roles = data?.map(r => r.role) ?? [];
+      setIsAdmin(roles.includes('admin'));
+      setIsCollaborator(roles.includes('collaborator'));
     } catch (err) {
-      console.error('Error checking admin role:', err);
+      console.error('Error checking user roles:', err);
       setIsAdmin(false);
+      setIsCollaborator(false);
     }
   };
 
@@ -52,13 +57,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null);
         setIsLoading(false);
 
-        // Defer admin check with setTimeout to avoid deadlock
+        // Defer role check with setTimeout to avoid deadlock
         if (session?.user) {
           setTimeout(() => {
-            checkAdminRole(session.user.id);
+            checkUserRoles(session.user.id);
           }, 0);
         } else {
           setIsAdmin(false);
+          setIsCollaborator(false);
         }
       }
     );
@@ -70,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(false);
       
       if (session?.user) {
-        checkAdminRole(session.user.id);
+        checkUserRoles(session.user.id);
       }
     });
 
@@ -101,6 +107,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async () => {
     await supabase.auth.signOut();
     setIsAdmin(false);
+    setIsCollaborator(false);
   };
 
   const resetPassword = async (email: string) => {
@@ -116,6 +123,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return { error: error as Error | null };
   };
 
+  const canEditContent = isAdmin || isCollaborator;
+
   return (
     <AuthContext.Provider
       value={{
@@ -123,6 +132,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         session,
         isLoading,
         isAdmin,
+        isCollaborator,
+        canEditContent,
         signIn,
         signUp,
         signOut,
