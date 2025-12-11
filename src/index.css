@@ -37,7 +37,7 @@ All colors MUST be HSL.
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 141 84.2105% 92.549%;
+    --accent: 142 76.6423% 73.1373%;
     --accent-foreground: 270 95.2381% 75.2941%;
 
     --destructive: 0 84% 60%;
@@ -47,7 +47,7 @@ All colors MUST be HSL.
     --input: 27 95.9799% 60.9804%;
     --ring: 0 0% 0%;
 
-    --radius: 0.625rem;
+    --radius: 0.627rem;
 
     --header-bg: 0 0% 100%;
     --content-bg: 0 0% 100%;
@@ -98,10 +98,10 @@ All colors MUST be HSL.
     --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
     --shadow-2xs: 1px 1px 0px 0px #000000;
     --shadow-xs: 2px 2px 0px 0px #000000;
-    --shadow-sm: 5px 5px 0px 0px hsl(326, 85%, 90%);
-    --shadow: 5px 5px 0px 0px hsl(326, 85%, 90%);
-    --shadow-md: 5px 5px 0px 0px hsl(326, 85%, 90%);
-    --shadow-lg: 5px 5px 0px 0px hsl(326, 85%, 90%);
+    --shadow-sm: 2px 5px 0px 0px hsl(141, 79%, 85%);
+    --shadow: 2px 5px 0px 0px hsl(141, 79%, 85%);
+    --shadow-md: 2px 5px 0px 0px hsl(141, 79%, 85%);
+    --shadow-lg: 2px 5px 0px 0px hsl(141, 79%, 85%);
     --shadow-xl: 16px 16px 0px 0px #000000;
     --shadow-2xl: 24px 24px 0px 0px #000000;
     --tracking-normal: 0em;
@@ -166,14 +166,14 @@ All colors MUST be HSL.
     --sidebar-ring: 0 0% 100%;
     --shadow-2xs: 1px 1px 0px 0px #ffffff;
     --shadow-xs: 2px 2px 0px 0px #ffffff;
-    --shadow-sm: 3px 3px 0px 0px #ffffff;
-    --shadow: 5px 5px 0px 0px #ffffff;
-    --shadow-md: 8px 8px 0px 0px #ffffff;
-    --shadow-lg: 12px 12px 0px 0px #ffffff;
+    --shadow-sm: 2px 5px 0px 0px hsl(141, 79%, 85%);
+    --shadow: 2px 5px 0px 0px hsl(141, 79%, 85%);
+    --shadow-md: 2px 5px 0px 0px hsl(141, 79%, 85%);
+    --shadow-lg: 2px 5px 0px 0px hsl(141, 79%, 85%);
     --shadow-xl: 16px 16px 0px 0px #ffffff;
     --shadow-2xl: 24px 24px 0px 0px #ffffff;
     --sidebar-background: 124 5% 10%;
-    --radius: 0rem;
+    --radius: 0.627rem;
   }
 }
 
