@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { z } from "npm:zod@3.25.76";
 
 const corsHeaders = {
@@ -46,7 +47,6 @@ function checkRateLimit(ip: string): { allowed: boolean; remaining: number; rese
 
 // Get client IP from request headers
 function getClientIP(req: Request): string {
-  // Check common proxy headers
   const forwardedFor = req.headers.get("x-forwarded-for");
   if (forwardedFor) {
     return forwardedFor.split(",")[0].trim();
@@ -154,15 +154,38 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { name, email, message } = validationResult.data;
 
-    // Log sanitized submission (no sensitive data in production)
-    console.log("Valid contact form submission from:", email.split("@")[0] + "@***");
+    // Initialize Supabase client with service role for database insert
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Here you would typically:
-    // 1. Store the message in a database
-    // 2. Send an email notification
-    // 3. Add to a CRM, etc.
-    
-    // For now, we just validate and acknowledge
+    // Store submission in database
+    const { error: dbError } = await supabase
+      .from("contact_submissions")
+      .insert({
+        name,
+        email,
+        message,
+        ip_address: clientIP !== "unknown" ? clientIP : null,
+      });
+
+    if (dbError) {
+      console.error("Database error:", dbError);
+      // Don't expose database errors to user, but still acknowledge the message
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: "Thank you for your message! I'll get back to you soon." 
+        }),
+        { 
+          status: 200, 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        }
+      );
+    }
+
+    console.log("Contact submission stored successfully for:", email.split("@")[0] + "@***");
+
     return new Response(
       JSON.stringify({ 
         success: true, 
