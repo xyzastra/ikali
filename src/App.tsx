@@ -4,7 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { ReadingProgress } from "@/components/ReadingProgress";
+import { PageTransition } from "@/components/PageTransition";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -28,45 +31,48 @@ const queryClient = new QueryClient();
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <a href="#main-content" className="skip-to-content">
-              Skip to main content
-            </a>
-            <main id="main-content">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/projects" element={<Projects />} />
-                <Route path="/projects/:id" element={<ProjectDetail />} />
-                <Route path="/idea-dumps" element={<IdeaDumps />} />
-                <Route path="/idea-dumps/:id" element={<IdeaDumpDetail />} />
-                <Route path="/journal" element={<Journal />} />
-                <Route path="/journal/:id" element={<JournalDetail />} />
-                <Route path="/resume" element={<Resume />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/community" element={<Community />} />
-                <Route path="/community/submit" element={<SubmitProject />} />
-                <Route path="/community/:id" element={<CommunityProjectDetail />} />
-                <Route path="/profile/:userId" element={<UserProfile />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route
-                  path="/admin"
-                  element={
-                    <ProtectedRoute requireAdmin>
-                      <Admin />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-          </BrowserRouter>
-        </TooltipProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <ReadingProgress />
+            <BrowserRouter>
+              <a href="#main-content" className="skip-to-content">
+                Skip to main content
+              </a>
+              <main id="main-content">
+                <Routes>
+                  <Route path="/" element={<PageTransition><Index /></PageTransition>} />
+                  <Route path="/projects" element={<PageTransition><Projects /></PageTransition>} />
+                  <Route path="/projects/:id" element={<PageTransition><ProjectDetail /></PageTransition>} />
+                  <Route path="/idea-dumps" element={<PageTransition><IdeaDumps /></PageTransition>} />
+                  <Route path="/idea-dumps/:id" element={<PageTransition><IdeaDumpDetail /></PageTransition>} />
+                  <Route path="/journal" element={<PageTransition><Journal /></PageTransition>} />
+                  <Route path="/journal/:id" element={<PageTransition><JournalDetail /></PageTransition>} />
+                  <Route path="/resume" element={<PageTransition><Resume /></PageTransition>} />
+                  <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+                  <Route path="/community" element={<PageTransition><Community /></PageTransition>} />
+                  <Route path="/community/submit" element={<PageTransition><SubmitProject /></PageTransition>} />
+                  <Route path="/community/:id" element={<PageTransition><CommunityProjectDetail /></PageTransition>} />
+                  <Route path="/profile/:userId" element={<PageTransition><UserProfile /></PageTransition>} />
+                  <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
+                  <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
+                  <Route
+                    path="/admin"
+                    element={
+                      <ProtectedRoute requireAdmin>
+                        <PageTransition><Admin /></PageTransition>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+                </Routes>
+              </main>
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };
