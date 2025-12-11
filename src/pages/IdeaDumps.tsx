@@ -5,10 +5,11 @@ import { useIdeaDumps } from "@/hooks/useIdeaDumps";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { Lightbulb, Sprout, TreeDeciduous, Leaf, ArrowRight, Clock } from "lucide-react";
+import { Lightbulb, Sprout, TreeDeciduous, Leaf, ArrowRight, Clock, Pencil, User } from "lucide-react";
 import { format } from "date-fns";
 import { BottomSheet } from "@/components/BottomSheet";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/hooks/useAuth";
 
 // Idea maturity based on content length or tags
 const getIdeaMaturity = (content: string | null, tags: string[] | null) => {
@@ -28,6 +29,7 @@ const IdeaDumps = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const [activeId, setActiveId] = useState<string | null>(null);
+  const { user } = useAuth();
 
   const activeIdea = ideaDumps?.find((i) => i.id === activeId) || null;
 
@@ -70,6 +72,7 @@ const IdeaDumps = () => {
               const maturity = getIdeaMaturity(idea.content, idea.tags);
               const MaturityIcon = maturity.icon;
               const hasLongDesc = (idea.description?.length || 0) > 100;
+              const isOwner = user?.id === idea.user_id;
               
               const CardContent = (
                 <article 
@@ -94,7 +97,22 @@ const IdeaDumps = () => {
                           {maturity.label}
                         </span>
                       </div>
-                      <Lightbulb className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary/50 transition-colors" />
+                      <div className="flex items-center gap-2">
+                        {isOwner && (
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              navigate(`/idea-dumps/${idea.id}/edit`);
+                            }}
+                            className="p-1 rounded-full hover:bg-muted transition-colors"
+                            title="Edit idea"
+                          >
+                            <Pencil className="w-3.5 h-3.5 text-muted-foreground hover:text-primary" />
+                          </button>
+                        )}
+                        <Lightbulb className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary/50 transition-colors" />
+                      </div>
                     </div>
 
                     <h3 className="text-base md:text-lg font-serif font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
@@ -128,6 +146,13 @@ const IdeaDumps = () => {
 
                     <div className="flex items-center justify-between pt-2 text-xs text-muted-foreground">
                       <div className="flex items-center gap-3">
+                        {/* Owner display name */}
+                        {idea.owner_display_name && (
+                          <span className="flex items-center gap-1 text-muted-foreground/80">
+                            <User className="w-3 h-3" />
+                            {idea.owner_display_name}
+                          </span>
+                        )}
                         <time className="font-mono">
                           {idea.published_date 
                             ? format(new Date(idea.published_date), "MMM d")
