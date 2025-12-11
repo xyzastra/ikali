@@ -96,9 +96,52 @@ const Projects = () => {
               </Link>
             )}
 
-            {/* Bento Grid Cards */}
+            {/* Mobile: Horizontal Swipe Strip */}
+            <div className="md:hidden col-span-1 -mx-4 px-4">
+              <div className="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide [-webkit-overflow-scrolling:touch]">
+                {rest.map((project) => (
+                  <Link
+                    key={project.id}
+                    to={`/projects/${project.id}`}
+                    className="group flex-shrink-0 w-[280px] snap-center relative overflow-hidden rounded-xl bg-card border border-border/50
+                      transform-gpu transition-all duration-300 hover:shadow-xl active:scale-[0.98]"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative p-5 min-h-[180px] flex flex-col justify-between">
+                      <div className="space-y-2">
+                        <h3 className="text-base font-serif font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                          {project.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {project.description}
+                        </p>
+                      </div>
+                      <div className="space-y-2 pt-3">
+                        <div className="flex flex-wrap gap-1">
+                          {project.tags?.slice(0, 2).map((tag, i) => (
+                            <Badge key={i} variant="outline" className="text-[10px]">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>{project.published_date ? format(new Date(project.published_date), "MMM yyyy") : ""}</span>
+                          <span className="flex items-center gap-1 text-primary">
+                            View <ArrowRight className="w-3 h-3" />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <p className="text-center text-[11px] text-muted-foreground mt-2">
+                ← Swipe to browse →
+              </p>
+            </div>
+
+            {/* Desktop: Bento Grid Cards */}
             {rest.map((project, index) => {
-              // Alternate between different card sizes for visual interest
               const isLarge = index % 3 === 0;
               const colSpan = isLarge ? "md:col-span-8" : "md:col-span-4";
 
@@ -106,7 +149,7 @@ const Projects = () => {
                 <Link
                   key={project.id}
                   to={`/projects/${project.id}`}
-                  className={`group col-span-1 ${colSpan} relative overflow-hidden rounded-xl bg-card border border-border/50
+                  className={`hidden md:block group col-span-1 ${colSpan} relative overflow-hidden rounded-xl bg-card border border-border/50
                     transform-gpu transition-all duration-300 hover:scale-[1.02] hover:shadow-xl
                     hover:-translate-y-1 active:scale-[0.98]`}
                   style={{ 
