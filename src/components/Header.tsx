@@ -66,13 +66,13 @@ export const Header = () => {
       </Link>;
   };
   return <header className="sticky top-0 z-50 w-full border-b border-border bg-header">
-      <nav className="container mx-auto px-8 h-20 flex items-center justify-between max-w-7xl">
+      <nav className="container mx-auto h-20 flex items-center justify-between max-w-7xl px-[6px] py-[2px]">
         <Link to="/" className="font-serif font-bold text-foreground hover:opacity-60 transition-opacity tracking-tight uppercase text-sm">
           brainOS
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-[6px]">
+        <div className="hidden small:flex items-center gap-[4px]">
           {navigation.map(item => <NavLink key={item.path} {...item} />)}
           {isAdmin && <NavLink name="Admin" path="/admin" icon={Settings} />}
           {!user && <NavLink name="Login" path="/auth" icon={User} />}
