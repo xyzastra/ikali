@@ -1,14 +1,16 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { Header } from "@/components/Header";
 import { SectionHeader } from "@/components/SectionHeader";
 import { useJournalEntries } from "@/hooks/useJournalEntries";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Clock, BookOpen, ArrowRight, TrendingUp, FileText, MessageSquare, X } from "lucide-react";
 import { format } from "date-fns";
 
 type EntryType = "Strategy" | "Policy" | "Reflection";
+
+const validTypes: EntryType[] = ["Strategy", "Policy", "Reflection"];
 
 // Helper to detect entry type based on title/tags
 const getEntryType = (entry: { title: string; tags?: string[] | null }): { 
@@ -36,7 +38,11 @@ const typeConfig: Record<EntryType, { color: string; icon: React.ElementType }> 
 
 const Journal = () => {
   const { data: journalEntries, isLoading, error } = useJournalEntries();
-  const [activeFilter, setActiveFilter] = useState<EntryType | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  // Get filter from URL, validate it
+  const typeParam = searchParams.get("type");
+  const activeFilter = validTypes.includes(typeParam as EntryType) ? (typeParam as EntryType) : null;
 
   // Filter entries based on active filter
   const filteredEntries = useMemo(() => {
@@ -60,7 +66,17 @@ const Journal = () => {
   const years = Object.keys(entriesByYear).sort((a, b) => b.localeCompare(a));
 
   const handleFilterClick = (type: EntryType) => {
-    setActiveFilter(prev => prev === type ? null : type);
+    if (activeFilter === type) {
+      searchParams.delete("type");
+    } else {
+      searchParams.set("type", type);
+    }
+    setSearchParams(searchParams, { replace: true });
+  };
+
+  const clearFilter = () => {
+    searchParams.delete("type");
+    setSearchParams(searchParams, { replace: true });
   };
 
   return (
@@ -97,7 +113,7 @@ const Journal = () => {
           })}
           {activeFilter && (
             <button
-              onClick={() => setActiveFilter(null)}
+              onClick={clearFilter}
               className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             >
               <X className="w-3 h-3" />
@@ -234,7 +250,7 @@ const Journal = () => {
             </p>
             {activeFilter && (
               <button
-                onClick={() => setActiveFilter(null)}
+                onClick={clearFilter}
                 className="mt-4 inline-flex items-center gap-1 text-primary hover:underline"
               >
                 <X className="w-4 h-4" />
