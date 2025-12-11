@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useOptimistic, useTransition } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,16 @@ const CommunityProjectDetail = () => {
 
   const [newComment, setNewComment] = useState("");
   const [replyTo, setReplyTo] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  // Optimistic state for vote
+  const [optimisticVote, setOptimisticVote] = useOptimistic(
+    { hasVoted: !!userVote, count: project?.upvote_count ?? 0 },
+    (state, newHasVoted: boolean) => ({
+      hasVoted: newHasVoted,
+      count: newHasVoted ? state.count + 1 : state.count - 1,
+    })
+  );
 
   if (isLoading) {
     return (
@@ -50,7 +60,11 @@ const CommunityProjectDetail = () => {
 
   const handleVote = () => {
     if (!user) return;
-    toggleVote.mutate({ projectId: project.id, userId: user.id, hasVoted: !!userVote });
+    const newHasVoted = !optimisticVote.hasVoted;
+    startTransition(async () => {
+      setOptimisticVote(newHasVoted);
+      await toggleVote.mutateAsync({ projectId: project.id, userId: user.id, hasVoted: optimisticVote.hasVoted });
+    });
   };
 
   const handleDelete = async () => {
@@ -115,13 +129,13 @@ const CommunityProjectDetail = () => {
 
           <div className="flex items-center gap-2">
             <Button
-              variant={userVote ? "default" : "outline"}
+              variant={optimisticVote.hasVoted ? "default" : "outline"}
               onClick={handleVote}
-              disabled={!user || toggleVote.isPending}
+              disabled={!user || isPending}
               className="gap-2"
             >
               <ArrowUp className="h-4 w-4" />
-              {project.upvote_count}
+              {optimisticVote.count}
             </Button>
             {isAdmin && (
               <Button variant="outline" onClick={handleFeature} className="gap-2">
