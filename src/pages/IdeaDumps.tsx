@@ -4,25 +4,11 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { useIdeaDumps } from "@/hooks/useIdeaDumps";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link, useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
-import { Lightbulb, Sprout, TreeDeciduous, Leaf, ArrowRight, Clock, Pencil, User } from "lucide-react";
-import { format } from "date-fns";
+import { Lightbulb, Sprout, TreeDeciduous, Leaf, ArrowRight } from "lucide-react";
 import { BottomSheet } from "@/components/BottomSheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/hooks/useAuth";
-
-// Idea maturity based on content length or tags
-const getIdeaMaturity = (content: string | null, tags: string[] | null) => {
-  const contentLength = content?.length || 0;
-  const tagCount = tags?.length || 0;
-  
-  if (contentLength > 1000 || tagCount > 4) {
-    return { label: "Evergreen", icon: TreeDeciduous, color: "text-green-600 dark:text-green-400" };
-  } else if (contentLength > 400 || tagCount > 2) {
-    return { label: "Growing", icon: Leaf, color: "text-emerald-500 dark:text-emerald-400" };
-  }
-  return { label: "Seedling", icon: Sprout, color: "text-lime-500 dark:text-lime-400" };
-};
+import { IdeaCard, getIdeaMaturity, type IdeaSize } from "@/components/IdeaCard";
 
 const IdeaDumps = () => {
   const { data: ideaDumps, isLoading, error } = useIdeaDumps();
@@ -32,6 +18,14 @@ const IdeaDumps = () => {
   const { user } = useAuth();
 
   const activeIdea = ideaDumps?.find((i) => i.id === activeId) || null;
+
+  // Determine size variant based on index for bento effect
+  const getSizeVariant = (index: number): IdeaSize => {
+    const pattern = index % 6;
+    if (pattern === 0 || pattern === 5) return "large";
+    if (pattern === 2 || pattern === 3) return "medium";
+    return "small";
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -43,7 +37,7 @@ const IdeaDumps = () => {
           description="Raw concepts exploring policy frameworks, decentralized systems, and innovation."
         />
 
-        {/* Maturity Legend - Mobile horizontal scroll */}
+        {/* Maturity Legend */}
         <div className="flex gap-4 md:gap-6 mb-8 pb-2 overflow-x-auto scrollbar-hide">
           {[
             { label: "Seedling", icon: Sprout, desc: "Fresh thoughts" },
@@ -70,121 +64,32 @@ const IdeaDumps = () => {
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 md:gap-6 space-y-4 md:space-y-6">
             {ideaDumps.map((idea, index) => {
               const maturity = getIdeaMaturity(idea.content, idea.tags);
-              const MaturityIcon = maturity.icon;
-              const hasLongDesc = (idea.description?.length || 0) > 100;
               const isOwner = user?.id === idea.user_id;
-              
-              const CardContent = (
-                <article 
-                  className="relative overflow-hidden rounded-2xl bg-card border border-border/50 p-5 md:p-6
-                    transform-gpu transition-all duration-300
-                    hover:shadow-xl hover:-translate-y-1 hover:border-primary/30
-                    active:scale-[0.98]"
-                  style={{
-                    borderRadius: index % 2 === 0 
-                      ? "1.5rem 1.5rem 0.5rem 1.5rem" 
-                      : "1.5rem 1.5rem 1.5rem 0.5rem"
-                  }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute -top-2 -right-2 w-16 h-16 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                  <div className="relative space-y-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <MaturityIcon className={`w-4 h-4 ${maturity.color}`} />
-                        <span className={`text-xs font-medium ${maturity.color}`}>
-                          {maturity.label}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {isOwner && (
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              navigate(`/idea-dumps/${idea.id}/edit`);
-                            }}
-                            className="p-1 rounded-full hover:bg-muted transition-colors"
-                            title="Edit idea"
-                          >
-                            <Pencil className="w-3.5 h-3.5 text-muted-foreground hover:text-primary" />
-                          </button>
-                        )}
-                        <Lightbulb className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary/50 transition-colors" />
-                      </div>
-                    </div>
-
-                    <h3 className="text-base md:text-lg font-serif font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                      {idea.title}
-                    </h3>
-
-                    {idea.description && (
-                      <p className={`text-sm text-muted-foreground leading-relaxed ${hasLongDesc ? "line-clamp-4" : "line-clamp-2"}`}>
-                        {idea.description}
-                      </p>
-                    )}
-
-                    {idea.tags && idea.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {idea.tags.slice(0, 4).map((tag, i) => (
-                          <span 
-                            key={i} 
-                            className="text-[10px] md:text-xs px-2 py-0.5 rounded-full bg-muted/60 text-muted-foreground
-                              group-hover:bg-primary/10 group-hover:text-primary/80 transition-colors"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                        {idea.tags.length > 4 && (
-                          <span className="text-[10px] text-muted-foreground">
-                            +{idea.tags.length - 4}
-                          </span>
-                        )}
-                      </div>
-                    )}
-
-                    <div className="flex items-center justify-between pt-2 text-xs text-muted-foreground">
-                      <div className="flex items-center gap-3">
-                        {/* Owner display name */}
-                        {idea.owner_display_name && (
-                          <span className="flex items-center gap-1 text-muted-foreground/80">
-                            <User className="w-3 h-3" />
-                            {idea.owner_display_name}
-                          </span>
-                        )}
-                        <time className="font-mono">
-                          {idea.published_date 
-                            ? format(new Date(idea.published_date), "MMM d")
-                            : ""}
-                        </time>
-                        {idea.reading_time && (
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {idea.reading_time}m
-                          </span>
-                        )}
-                      </div>
-                      <span className="flex items-center gap-1 text-primary opacity-0 group-hover:opacity-100 transition-all font-medium">
-                        {isMobile ? "View" : "Explore"} <ArrowRight className="w-3 h-3" />
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              );
+              const sizeVariant = getSizeVariant(index);
 
               // Mobile: Button opens bottom sheet
               if (isMobile) {
                 return (
-                  <button
+                  <div
                     key={idea.id}
-                    type="button"
-                    onClick={() => setActiveId(idea.id)}
-                    className="group block break-inside-avoid mb-4 md:mb-6 w-full text-left"
+                    className="break-inside-avoid mb-4 md:mb-6"
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    {CardContent}
-                  </button>
+                    <IdeaCard
+                      id={idea.id}
+                      title={idea.title}
+                      description={idea.description}
+                      tags={idea.tags}
+                      publishedDate={idea.published_date}
+                      maturity={maturity}
+                      sizeVariant={sizeVariant}
+                      isOwner={isOwner}
+                      ownerName={idea.owner_display_name}
+                      ownerAvatar={idea.owner_avatar_url}
+                      onClick={() => setActiveId(idea.id)}
+                      className="cursor-pointer"
+                    />
+                  </div>
                 );
               }
 
@@ -193,10 +98,22 @@ const IdeaDumps = () => {
                 <Link
                   key={idea.id}
                   to={`/idea-dumps/${idea.id}`}
-                  className="group block break-inside-avoid mb-4 md:mb-6"
+                  className="block break-inside-avoid mb-4 md:mb-6"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  {CardContent}
+                  <IdeaCard
+                    id={idea.id}
+                    title={idea.title}
+                    description={idea.description}
+                    tags={idea.tags}
+                    publishedDate={idea.published_date}
+                    maturity={maturity}
+                    sizeVariant={sizeVariant}
+                    isOwner={isOwner}
+                    ownerName={idea.owner_display_name}
+                    ownerAvatar={idea.owner_avatar_url}
+                    className="cursor-pointer"
+                  />
                 </Link>
               );
             })}
@@ -221,12 +138,13 @@ const IdeaDumps = () => {
               {/* Maturity Badge */}
               {(() => {
                 const maturity = getIdeaMaturity(activeIdea.content, activeIdea.tags);
-                const MaturityIcon = maturity.icon;
+                const icons = { seedling: Sprout, growing: Leaf, evergreen: TreeDeciduous };
+                const MaturityIcon = icons[maturity];
                 return (
                   <div className="flex items-center gap-2">
-                    <MaturityIcon className={`w-4 h-4 ${maturity.color}`} />
-                    <span className={`text-sm font-medium ${maturity.color}`}>
-                      {maturity.label}
+                    <MaturityIcon className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-medium text-primary capitalize">
+                      {maturity}
                     </span>
                   </div>
                 );
