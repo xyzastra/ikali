@@ -25,7 +25,7 @@ type ContentType = 'projects' | 'journal' | 'ideas';
 type EditorMode = 'create' | 'edit' | null;
 
 const Admin = () => {
-  const { user, signOut, isAdmin } = useAuth();
+  const { user, signOut, isAdmin, isCollaborator, canEditContent } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<ContentType>('projects');
   const [editorMode, setEditorMode] = useState<EditorMode>(null);
@@ -142,10 +142,12 @@ const Admin = () => {
           </Button>
         </div>
 
-        {isAdmin ? (
+        {canEditContent ? (
           <>
             <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
-              <p className="text-sm font-medium text-primary">✓ Admin privileges active</p>
+              <p className="text-sm font-medium text-primary">
+                ✓ {isAdmin ? 'Admin' : 'Collaborator'} privileges active
+              </p>
               <p className="text-xs text-muted-foreground mt-1">
                 You can create, edit, and delete content.
               </p>

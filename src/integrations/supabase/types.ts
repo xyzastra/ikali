@@ -767,6 +767,7 @@ export type Database = {
         Args: { event: Json }
         Returns: Json
       }
+      is_collaborator: { Args: never; Returns: boolean }
       is_thread_member:
         | { Args: { p_thread_id: string; p_user_id: string }; Returns: boolean }
         | { Args: { thread_id_input: number }; Returns: boolean }
@@ -788,7 +789,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "moderator" | "user" | "collaborator"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -916,7 +917,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "moderator", "user", "collaborator"],
     },
   },
 } as const
