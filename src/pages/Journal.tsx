@@ -4,8 +4,11 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { useJournalEntries } from "@/hooks/useJournalEntries";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSearchParams } from "react-router-dom";
-import { TrendingUp, FileText, MessageSquare, X } from "lucide-react";
+import { TrendingUp, FileText, MessageSquare, X, Check, Loader2 } from "lucide-react";
 import { JournalCard, getEntryType, type JournalEntryType, type JournalStyle } from "@/components/JournalCard";
+import { useUserPreferences } from "@/hooks/useUserPreferences";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
 
 const validTypes: JournalEntryType[] = ["Strategy", "Policy", "Reflection"];
 
@@ -18,16 +21,12 @@ const typeConfig: Record<JournalEntryType, { color: string; icon: React.ElementT
 const Journal = () => {
   const { data: journalEntries, isLoading, error } = useJournalEntries();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user } = useAuth();
+  const { journalStyle, setJournalStyle, isUpdating } = useUserPreferences();
   
   // Get filter from URL, validate it
   const typeParam = searchParams.get("type");
   const activeFilter = validTypes.includes(typeParam as JournalEntryType) ? (typeParam as JournalEntryType) : null;
-
-  // Get style from URL (for demo purposes - normally this would come from user preferences)
-  const styleParam = searchParams.get("style") as JournalStyle | null;
-  const journalStyle: JournalStyle = styleParam && ["minimal", "notebook", "typewriter"].includes(styleParam) 
-    ? styleParam 
-    : "minimal";
 
   // Filter entries based on active filter
   const filteredEntries = useMemo(() => {
@@ -65,8 +64,18 @@ const Journal = () => {
   };
 
   const handleStyleChange = (style: JournalStyle) => {
-    searchParams.set("style", style);
-    setSearchParams(searchParams, { replace: true });
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Sign in to save your style preference",
+      });
+      return;
+    }
+    setJournalStyle(style);
+    toast({
+      title: "Style saved",
+      description: `Your journal style is now set to ${style}`,
+    });
   };
 
   return (
@@ -117,19 +126,28 @@ const Journal = () => {
           {/* Style Switcher */}
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground">Style:</span>
-            {(["minimal", "notebook", "typewriter"] as JournalStyle[]).map((style) => (
-              <button
-                key={style}
-                onClick={() => handleStyleChange(style)}
-                className={`px-2 py-1 rounded text-xs capitalize transition-colors ${
-                  journalStyle === style
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {style}
-              </button>
-            ))}
+            {(["minimal", "notebook", "typewriter"] as JournalStyle[]).map((style) => {
+              const isActive = journalStyle === style;
+              return (
+                <button
+                  key={style}
+                  onClick={() => handleStyleChange(style)}
+                  disabled={isUpdating}
+                  className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs capitalize transition-colors ${
+                    isActive
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:text-foreground"
+                  } ${isUpdating ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  {isActive && isUpdating ? (
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                  ) : isActive ? (
+                    <Check className="w-3 h-3" />
+                  ) : null}
+                  {style}
+                </button>
+              );
+            })}
           </div>
         </div>
 
