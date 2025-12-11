@@ -119,6 +119,21 @@ export type Database = {
         }
         Relationships: []
       }
+      deny_passwords: {
+        Row: {
+          added_at: string | null
+          password_hash: string
+        }
+        Insert: {
+          added_at?: string | null
+          password_hash: string
+        }
+        Update: {
+          added_at?: string | null
+          password_hash?: string
+        }
+        Relationships: []
+      }
       idea_dumps: {
         Row: {
           content: string | null
